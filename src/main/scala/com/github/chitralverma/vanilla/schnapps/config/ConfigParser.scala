@@ -20,6 +20,7 @@ import java.io.File
 
 import com.github.chitralverma.vanilla.schnapps.enums._
 import com.github.chitralverma.vanilla.schnapps.internal.Logging
+import com.github.chitralverma.vanilla.schnapps.utils.Utils
 import com.github.chitralverma.vanilla.schnapps.utils.Utils.withTry
 import org.clapper.classutil.ClassFinder
 import org.json4s.{file2JsonInput, DefaultFormats, Formats}
@@ -37,6 +38,7 @@ object ConfigParser extends Logging {
   final val classFinder: ClassFinder = ClassFinder()
 
   def parse(args: Array[String]): Configuration = {
+    Utils.printLogo()
     if (_instance == null) {
       _instance = {
 

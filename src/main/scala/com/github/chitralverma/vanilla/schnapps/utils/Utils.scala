@@ -16,11 +16,28 @@
 
 package com.github.chitralverma.vanilla.schnapps.utils
 
-import java.util.Locale
+import java.util.{Locale, Properties}
 
+import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
 object Utils {
+  // scalastyle:off println
+  def printLogo(): Unit = {
+    import scala.io.BufferedSource
+    val textArt: BufferedSource =
+      Source.fromInputStream(ClassLoader.getSystemResourceAsStream("text-art.txt"))
+    val p = new Properties()
+    p.load(ClassLoader.getSystemResourceAsStream("maven.properties"))
+    println(
+      textArt
+        .getLines()
+        .mkString("\n")
+        .replace("project.version", p.getProperty("project.version")))
+
+    textArt.close()
+  }
+  // scalastyle:on println
 
   def withTry[T](f: => T, errorMsg: String = "Fatal Error Occurred:"): T =
     Try(f) match {
