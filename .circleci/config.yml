@@ -46,9 +46,7 @@ workflows:
     jobs:
       - validate-maven-installation
 
-      - perform-unit-tests:
-          requires:
-            validate-maven-installation
+      - perform-unit-tests
 
 
 
