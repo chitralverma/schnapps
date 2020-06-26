@@ -13,12 +13,12 @@ jobs:
     executor: machine
     steps:
       - run:
-          name: Send coverage to CodeCov
+          name: Validate if Maven exists
           command: |
             if [[ $(command -v mvn) == "" ]]; then
-              echo " Maven is not installed "; exit 1;
+              echo "Maven is not installed"; exit 1;
             else
-              echo Maven successfully installed.
+              echo "Maven is available".
             fi
   perform-unit-tests:
     executor: machine
@@ -46,9 +46,7 @@ workflows:
     jobs:
       - validate-maven-installation
 
-      - perform-unit-tests:
-          requires:
-            validate-maven-installation
+      - perform-unit-tests
 
 
 

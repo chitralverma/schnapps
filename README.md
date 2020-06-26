@@ -19,14 +19,13 @@ They get bound to excessively complex tools/ frameworks, and eventually, these t
 Schnapps provides the boilerplate code for all these activities so that developers can focus on what matters the most - **Application Logic**.  
 
 ## Features
- - Contains an embedded server that hosts mostly managed web services
- - Provides standardized JSON-based app configuration out-of-the-box 
- - Allows Synchronous/ Asynchronous Web Applications and REST APIs
- - WebSockets, Server-Sent Events (SSE), Long-Polling, HTTP Streaming (Forever frame) and JSONP are all supported
+ - Standardized JSON-based project configuration out-of-the-box 
+ - Allows embedded servers (built on [Apache Dubbo](https://dubbo.apache.org/)) that hosts _mostly managed services_
  - Inbuilt authentication and authorization using [Apache Shiro](https://shiro.apache.org/)
- - Managed connectors to external systems like LDAP, JDBC and Redis.
+ - Allows synchronous/ asynchronous web applications and services over HTTP and RPCs
+ - Managed connectors to external systems like LDAP, JDBC, etc.
 
-## ~~Quick~~ Schnap Start
+## ~~Quick~~ SchnappStart
 Getting started with Schnapps is as straight-forward as it can get, as exactly 3 things need to be done,
  - Get it 
  - Configure it
@@ -54,6 +53,23 @@ For Gradle based projects,
 Depending on whether you use Schnapps in `Scala` or `Java` project, the usage syntax changes ever so slightly.
 
 ##### Configuring the project
+Use the minimum configuration template available [here](src/main/resources/rest-services-min-config.json) and follow 
+the steps below,
+
+In `Java` projects,
+```$xslt
+// Pass the location of the above JSON config as first argument 
+Configuration config = ConfigParser.parse(args); 
+```
+
+In `Scala` projects,
+```$xslt
+// Pass the location of the above JSON config as first argument 
+val config = ConfigParser.parse(args);
+```
+
+Note: `Configuration` is a singleton. That means, once it's parsed, you can refer to it anywhere in the code statically 
+by `ConfigParser.getConfiguration()`.
 
 ##### Establishing connection to Externals
 
@@ -80,15 +96,19 @@ In `Scala` projects,
 ```
 
 ##### Running the Server
+After the configuration has been successfully initialized (see [here](#configuring-the-project)), boot up the server(s)
+as following,
 
-In `Java` projects,
+In `Java` & `Scala` projects,
 ```$xslt
-
+Server.bootUp(config);
 ```
+This will load the different entities mentioned in the configuration like Application information, Service Registry, Protocols
+and Services. To hold the server(s) till they are given an explicit termination signal, do,
 
-In `Scala` projects,
+In `Java` & `Scala` projects,
 ```$xslt
-
+Server.await();
 ```
 
 ### Advanced Topics
@@ -98,13 +118,13 @@ You can head over to the Wiki for more advanced topics like,
  - Configuring Authorization
  - Configuring the Server
  - Slim ORM 
- - Service Discovery
+ - Service Discovery & Load Balancing
  - Implementing Custom externals 
  
 ### Contributing
 
-We're interested in building the community and would welcome any thoughts, suggestions and/ or patches. 
-You can reach us [here](mailto:chitralverma@gmail.com).
+I'm interested in building a community and would welcome any thoughts, suggestions and/ or patches. 
+You can reach me [@here](mailto:chitralverma@gmail.com).
 
 
 ### License

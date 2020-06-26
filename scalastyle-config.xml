@@ -1,3 +1,16 @@
+<!--Copyright 2020 Chitral Verma-->
+
+<!--        Licensed under the Apache License, Version 2.0 (the "License");-->
+<!--        you may not use this file except in compliance with the License.-->
+<!--        You may obtain a copy of the License at-->
+
+<!--        http://www.apache.org/licenses/LICENSE-2.0-->
+
+<!--        Unless required by applicable law or agreed to in writing, software-->
+<!--        distributed under the License is distributed on an "AS IS" BASIS,-->
+<!--        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.-->
+<!--        See the License for the specific language governing permissions and-->
+<!--        limitations under the License.-->
 <!--
 
 If you wish to turn off checking for a section of code, you can put a comment in the source
@@ -29,6 +42,26 @@ This file is divided into 3 sections:
     <!-- ================================================================================ -->
 
     <check level="error" class="org.scalastyle.file.FileTabChecker" enabled="true"/>
+
+    <check level="error" class="org.scalastyle.file.HeaderMatchesChecker" enabled="true">
+        <parameters>
+            <parameter name="header"><![CDATA[/*
+ * Copyright 2020 Chitral Verma
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */]]></parameter>
+        </parameters>
+    </check>
 
     <check level="error" class="org.scalastyle.scalariform.SpacesAfterPlusChecker" enabled="true"/>
 
@@ -117,6 +150,20 @@ This file is divided into 3 sections:
       // scalastyle:off println
       println(...)
       // scalastyle:on println]]></customMessage>
+    </check>
+
+    <check customId="runtimeaddshutdownhook" level="error" class="org.scalastyle.file.RegexChecker" enabled="true">
+        <parameters>
+            <parameter name="regex">Runtime\.getRuntime\.addShutdownHook</parameter>
+        </parameters>
+        <customMessage><![CDATA[
+      Are you sure that you want to use Runtime.getRuntime.addShutdownHook? In most cases, you should use
+      ShutdownHookManager.addShutdownHook instead.
+      If you must use Runtime.getRuntime.addShutdownHook, wrap the code block with
+      // scalastyle:off runtimeaddshutdownhook
+      Runtime.getRuntime.addShutdownHook(...)
+      // scalastyle:on runtimeaddshutdownhook
+    ]]></customMessage>
     </check>
 
     <check customId="mutablesynchronizedbuffer" level="error" class="org.scalastyle.file.RegexChecker" enabled="true">
@@ -209,7 +256,7 @@ This file is divided into 3 sections:
         </customMessage>
     </check>
 
-    <check customId="commonslang2" level="error" class="org.scalastyle.scalariform.TokenChecker" enabled="true">
+    <check customId="commonslang2" level="error" class="org.scalastyle.file.RegexChecker" enabled="true">
         <parameters>
             <parameter name="regex">org\.apache\.commons\.lang\.</parameter>
         </parameters>
@@ -243,21 +290,12 @@ This file is divided into 3 sections:
     ]]></customMessage>
     </check>
 
-    <check customId="NoScalaDoc" level="error" class="org.scalastyle.file.RegexChecker" enabled="false">
-        <parameters>
-            <parameter name="regex">(?m)^(\s*)/[*][*].*$(\r|)\n^\1 [*]</parameter>
-        </parameters>
-        <customMessage>Use Javadoc style indentation for multiline comments</customMessage>
-    </check>
-
     <check customId="OmitBracesInCase" level="error" class="org.scalastyle.file.RegexChecker" enabled="true">
         <parameters>
             <parameter name="regex">case[^\n>]*=>\s*\{</parameter>
         </parameters>
         <customMessage>Omit braces in case clauses.</customMessage>
     </check>
-
-    <check level="error" class="org.scalastyle.scalariform.OverrideJavaChecker" enabled="true"/>
 
     <check level="error" class="org.scalastyle.scalariform.DeprecatedJavaChecker" enabled="true"/>
 
@@ -267,7 +305,8 @@ This file is divided into 3 sections:
 
     <!-- We cannot turn the following two on, because it'd fail a lot of string interpolation use cases. -->
     <!-- Ideally the following two rules should be configurable to rule out string interpolation. -->
-    <check level="error" class="org.scalastyle.scalariform.NoWhitespaceBeforeLeftBracketChecker" enabled="false"/>
+    <check level="error" class="org.scalastyle.scalariform.NoWhitespaceBeforeLeftBracketChecker"
+           enabled="false"/>
     <check level="error" class="org.scalastyle.scalariform.NoWhitespaceAfterLeftBracketChecker" enabled="false"/>
 
     <!-- This breaks symbolic method names so we don't turn it on. -->

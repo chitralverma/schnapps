@@ -1,11 +1,24 @@
 {
   "appInfo": {
-    "name": "first-schnapps"
+    "name": "first-schnapps-min"
   },
   "serverConfig": {
     "host": "0.0.0.0",
-    "port": 1506,
-    "protocol": "REST"
+    "protocolConfigs": [
+      {
+        "name": "rest_protocol_1",
+        "protocol": "rest",
+        "port": 1506
+      }
+    ]
   },
-  "externalConfigs": []
+  "services": [
+    {
+      "version": "1.0",
+      "interface": "com.github.chitralverma.vanilla.schnapps.internal.RestService",
+      "protocolName": "rest_protocol_1",
+      "path": "test",
+      "className": "com.github.chitralverma.vanilla.schnapps.MyService"
+    }
+  ]
 }

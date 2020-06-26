@@ -1,12 +1,11 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Copyright 2020 Chitral Verma
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,15 +20,14 @@ import java.io.File
 import java.nio.file.Paths
 
 import com.github.chitralverma.vanilla.schnapps.config.Configuration
+import com.github.chitralverma.vanilla.schnapps.config.models._
+import com.github.chitralverma.vanilla.schnapps.enums.ProtocolEnums
 import com.github.chitralverma.vanilla.schnapps.internal.{Constants => Cnsnts, _}
 import com.github.chitralverma.vanilla.schnapps.utils.Utils
 import org.apache.dubbo.config._
 import org.apache.dubbo.config.bootstrap.DubboBootstrap
 
 import scala.collection.JavaConverters._
-// import org.apache.shiro.env.BasicIniEnvironment
-// import org.apache.shiro.mgt.SecurityManager
-// import org.apache.shiro.subject.Subject
 
 object Server extends Logging {
 
@@ -41,10 +39,10 @@ object Server extends Logging {
   def bootUp(configuration: Configuration): Unit = {
     if (_serverInstance == null) {
       _serverInstance = {
-        val appConfig = createAppConfig(configuration)
-        val registryConfig = createServiceRegistryConfig(configuration)
-        val protocolConfigs = createProtocols(configuration)
-        val serviceConfigs = createServices(configuration, protocolConfigs)
+        val appConfig: ApplicationConfig = createAppConfig(configuration)
+        val registryConfig: RegistryConfig = createServiceRegistryConfig(configuration)
+        val protocolConfigs: Map[String, ProtocolConfig] = createProtocols(configuration)
+        val serviceConfigs: Seq[ServiceConfig[_]] = createServices(configuration, protocolConfigs)
 
         DubboBootstrap
           .getInstance()
@@ -73,14 +71,14 @@ object Server extends Logging {
   }
 
   def await(): Unit = {
-    val instance = Option(_serverInstance)
+    val instance: Option[DubboBootstrap] = Option(_serverInstance)
     assert(instance.isDefined, "Server has not been booted up yet. Use `Server.bootUp(...)`.")
 
     _serverInstance.await()
   }
 
   private def createAppConfig(configuration: Configuration): ApplicationConfig = {
-    val appInfo = configuration.appInfo
+    val appInfo: AppInfoModel = configuration.appInfo
 
     val appConfig = new ApplicationConfig()
     appConfig.setName(appInfo.name)
@@ -102,7 +100,8 @@ object Server extends Logging {
   }
 
   private def createServiceRegistryConfig(configuration: Configuration): RegistryConfig = {
-    val serviceRegistryConfigOpt = configuration.serverConfig.serviceRegistryConfig
+    val serviceRegistryConfigOpt: Option[ServiceRegistryConfigModel] =
+      configuration.serverConfig.serviceRegistryConfig
     val registryConfig = new RegistryConfig()
 
     serviceRegistryConfigOpt match {
@@ -131,7 +130,7 @@ object Server extends Logging {
           assert(
             new File(srcm.workingDir.get).isDirectory,
             s"Provided value '${srcm.workingDir}' for is not a directory.")
-          val registryCacheFile =
+          val registryCacheFile: String =
             Paths
               .get(srcm.workingDir.get, Cnsnts.RegistryCacheDir, Cnsnts.RegistryCacheFile)
               .toString
@@ -167,6 +166,8 @@ object Server extends Logging {
 
         if (p.server.isDefined) {
           protocolConfig.setServer(p.server.get)
+        } else if (p.protocol == ProtocolEnums.rest) {
+          protocolConfig.setServer("netty") // todo move to enums
         }
 
         if (configuration.serverConfig.maxConnections.isDefined) {
@@ -201,8 +202,11 @@ object Server extends Logging {
   private def createServices(
       configuration: Configuration,
       protocolConfigs: Map[String, ProtocolConfig]): Seq[ServiceConfig[_]] = {
+    if (configuration.services.isEmpty) {
+      logger.info("No services were defined.")
+    }
 
-    val serviceConfigs = configuration.services.map(definition => {
+    val serviceConfigs: Seq[ServiceConfig[Any]] = configuration.services.map(definition => {
       protocolConfigs.get(definition.protocolName) match {
         case Some(protoConf) =>
           val serviceConfig = new ServiceConfig[Any]()
