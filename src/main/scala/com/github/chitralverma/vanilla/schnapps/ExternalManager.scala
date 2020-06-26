@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Chitral Verma
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.github.chitralverma.vanilla.schnapps
 
 import com.github.chitralverma.vanilla.schnapps.config.ConfigParser
@@ -13,8 +29,8 @@ object ExternalManager extends Logging {
   def loadExternals(): Seq[External] = {
     if (_managerInstance == null) {
       _managerInstance = {
-        val classes = scanExternals(ConfigParser.classFinder)
-        val externalConfigs =
+        val classes: Map[String, String] = scanExternals(ConfigParser.classFinder)
+        val externalConfigs: Seq[(ExternalConfig, Option[String])] =
           ConfigParser.getConfiguration.externalConfigs.map(ec => (ec, classes.get(ec.tpe)))
 
         val (availExtSeq, nAvailExtSeq) = externalConfigs.partition(_._2.nonEmpty)
@@ -27,7 +43,7 @@ object ExternalManager extends Logging {
             "Class not found for one or more external defined in provided config.")
         }
 
-        val externals = availExtSeq
+        val externals: Seq[External] = availExtSeq
           .map(
             ec =>
               Utils.getInstance[External](
@@ -59,7 +75,7 @@ object ExternalManager extends Logging {
         x.annotations.flatMap(_.params).toMap.get(Constants.Type) match {
           case Some(tpe) => Some(Utils.lower(tpe.toString), x.name)
           case None => None
-        })
+      })
       .toMap
   }
 
@@ -68,7 +84,7 @@ object ExternalManager extends Logging {
   }
 
   def getExternals: Seq[External] = {
-    val instance = Option(_managerInstance)
+    val instance: Option[Seq[External]] = Option(_managerInstance)
     assert(instance.isDefined, "Externals have not been loaded yet")
 
     _managerInstance
