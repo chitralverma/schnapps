@@ -1,0 +1,11 @@
+{
+  "appInfo": {
+    "name": "first-schnapps"
+  },
+  "serverConfig": {
+    "host": "0.0.0.0",
+    "port": 1506,
+    "protocol": "REST"
+  },
+  "externalConfigs": []
+}

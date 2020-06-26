@@ -1,0 +1,66 @@
+{
+  "appInfo": {
+    "name": "first-schnapps",
+    "version": "0.1",
+    "owner": "chitralverma",
+    "organization": "com.chitralverma.github"
+  },
+  "serverConfig": {
+    "host": "0.0.0.0",
+    "logAccess": "true",
+    "threads": 200,
+    "ioThreads": 8,
+    "maxConnections": 100,
+    "serviceRegistryConfig": {
+      "address": "zookeeper://127.0.0.1:2181",
+      "client": "curator",
+      "workingDir": "."
+    },
+    "protocolConfigs": [
+      {
+        "name": "rest_protocol_1",
+        "protocol": "rest",
+        "port": 1506,
+        "server": "netty",
+        "contextPath": "v1",
+        "serialization": "hessian2"
+      },
+      {
+        "name": "rest_protocol_2",
+        "protocol": "rest",
+        "server": "netty",
+        "port": 1507,
+        "contextPath": "v2",
+        "serialization": "hessian2"
+      }
+    ]
+  },
+  "services": [
+    {
+      "version": "1.0",
+      "interface": "com.github.chitralverma.vanilla.schnapps.internal.RestService",
+      "protocolName": "rest_protocol_1",
+      "path": "test",
+      "className": "com.github.chitralverma.vanilla.schnapps.JDBCService"
+    },
+    {
+      "version": "2.0",
+      "interface": "com.github.chitralverma.vanilla.schnapps.internal.RestService",
+      "protocolName": "rest_protocol_2",
+      "path": "test",
+      "className": "com.github.chitralverma.vanilla.schnapps.JDBCService"
+    }
+  ],
+  "externalConfigs": [
+    {
+      "name": "mysql_conn",
+      "type": "jdbc",
+      "configs": {
+        "username": "user",
+        "password": "pass",
+        "driverClassName": "com.mysql.jdbc.Driver",
+        "jdbcUrl": "jdbc:mysql://localhost:3306/testdb?useSSL=false"
+      }
+    }
+  ]
+}

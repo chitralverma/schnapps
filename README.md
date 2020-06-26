@@ -1,12 +1,15 @@
 ![Scale](src/main/resources/logo.png)
 ====
 
+[![codecov](https://codecov.io/gh/chitralverma/vanilla-schnapps/branch/master/graph/badge.svg?token=19E1FcjGTQ)](https://codecov.io/gh/chitralverma/vanilla-schnapps)
+
+
 > A clever exaggeration of apps-in-a-snap.
 >
 > _Noun_:  A type of alcoholic beverage that may take several forms.   
 > _Origin_: derived from the colloquial German word Schnaps [/ʃnɑːps/](https://en.wikipedia.org/wiki/Help:IPA/Standard_German)   
 
-Schnapps is a precise toolkit to rapidly develop production-grade, self-contained WebApps and REST APIs over HTTP and WebSockets.
+Schnapps is a precise toolkit to rapidly develop production-grade, self-contained WebApps and RESTful services over HTTP and WebSockets.
 It is completely written in `Scala` and is compatible with `Java` as well.  
 
 Backend developers spend a big chunk of their precious time on redundant activities across projects like app 
@@ -95,7 +98,7 @@ You can head over to the Wiki for more advanced topics like,
  - Configuring Authorization
  - Configuring the Server
  - Slim ORM 
- - Integrating with Service Discovery
+ - Service Discovery
  - Implementing Custom externals 
  
 ### Contributing
@@ -105,18 +108,6 @@ You can reach us [here](mailto:chitralverma@gmail.com).
 
 
 ### License
-Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
-
 Copyright 2020 Chitral Verma
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
