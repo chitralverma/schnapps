@@ -7,7 +7,10 @@
     <version>1.0-SNAPSHOT</version>
 
     <name>${project.artifactId}</name>
-    <description>Netty based boilerplate implementation for Micro services</description>
+    <description>
+        Schnapps is a precise toolkit to rapidly develop production-grade,
+        self-contained WebApps and REST APIs over HTTP and WebSockets.
+    </description>
     <inceptionYear>2020</inceptionYear>
 
     <licenses>
@@ -27,6 +30,10 @@
         </developer>
     </developers>
 
+    <issueManagement>
+        <system>Github Issues</system>
+        <url>https://github.com/chitralverma/vanilla-schnapps/issues</url>
+    </issueManagement>
 
     <properties>
         <encoding>UTF-8</encoding>
@@ -37,6 +44,7 @@
         <provided.scope>compile</provided.scope>
         <scalafmt.parameters>--diff --test</scalafmt.parameters>
         <scalafmt.skip>false</scalafmt.skip>
+        <argLine>-ea -Dfile.encoding=${encoding} -Xms256m -Xmx4g -Xss4m -XX:ReservedCodeCacheSize=1g</argLine>
 
         <java.version>1.8</java.version>
         <json4s.version>3.5.3</json4s.version>
@@ -136,9 +144,32 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <sourceDirectory>src/main/scala</sourceDirectory>
         <testSourceDirectory>src/test/scala</testSourceDirectory>
         <plugins>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>create-source-jar</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                            <goal>test-jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <!-- see http://davidb.github.com/scala-maven-plugin -->
                 <groupId>net.alchim31.maven</groupId>
@@ -166,6 +197,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
+                <configuration>
+                    <compilerArgs>
+                        <compilerArg>-proc:none</compilerArg>
+                        <compilerArg>-parameters</compilerArg>
+                    </compilerArgs>
+                    <fork>true</fork>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>${encoding}</encoding>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -178,11 +219,32 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.21.0</version>
+                <version>3.0.0-M3</version>
                 <configuration>
-                    <!-- Tests will be run with scalatest-maven-plugin instead -->
-                    <skipTests>true</skipTests>
+                    <includes>
+                        <include>**/Test*.java</include>
+                        <include>**/*Test.java</include>
+                        <include>**/*TestCase.java</include>
+                        <include>**/*Suite.java</include>
+                    </includes>
+                    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                    <argLine>${argLine}</argLine>
+                    <useSystemClassLoader>true</useSystemClassLoader>
+                    <forkMode>once</forkMode>
+                    <failIfNoTests>false</failIfNoTests>
+                    <systemProperties>
+                        <log4j.configuration>file:src/main/resources/log4j.properties</log4j.configuration>
+                        <java.io.tmpdir>${project.build.directory}/tmp</java.io.tmpdir>
+                    </systemProperties>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.scalatest</groupId>
@@ -192,8 +254,8 @@
                     <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                     <junitxml>.</junitxml>
                     <filereports>TestSuiteReport.txt</filereports>
-                    <!-- Comma separated list of JUnit test class names to execute -->
-                    <!--                    <jUnitClasses>samples.AppTest</jUnitClasses>-->
+                    <argLine>${argLine}</argLine>
+                    <stderr/>
                 </configuration>
                 <executions>
                     <execution>
