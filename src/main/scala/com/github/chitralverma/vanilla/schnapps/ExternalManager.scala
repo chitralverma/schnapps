@@ -75,7 +75,7 @@ object ExternalManager extends Logging {
         x.annotations.flatMap(_.params).toMap.get(Constants.Type) match {
           case Some(tpe) => Some(Utils.lower(tpe.toString), x.name)
           case None => None
-      })
+        })
       .toMap
   }
 
