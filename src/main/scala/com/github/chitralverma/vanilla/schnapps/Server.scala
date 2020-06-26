@@ -20,15 +20,14 @@ import java.io.File
 import java.nio.file.Paths
 
 import com.github.chitralverma.vanilla.schnapps.config.Configuration
+import com.github.chitralverma.vanilla.schnapps.config.models._
+import com.github.chitralverma.vanilla.schnapps.enums.ProtocolEnums
 import com.github.chitralverma.vanilla.schnapps.internal.{Constants => Cnsnts, _}
 import com.github.chitralverma.vanilla.schnapps.utils.Utils
 import org.apache.dubbo.config._
 import org.apache.dubbo.config.bootstrap.DubboBootstrap
 
 import scala.collection.JavaConverters._
-// import org.apache.shiro.env.BasicIniEnvironment
-// import org.apache.shiro.mgt.SecurityManager
-// import org.apache.shiro.subject.Subject
 
 object Server extends Logging {
 
@@ -79,7 +78,6 @@ object Server extends Logging {
   }
 
   private def createAppConfig(configuration: Configuration): ApplicationConfig = {
-    import com.github.chitralverma.vanilla.schnapps.config.models.AppInfoModel
     val appInfo: AppInfoModel = configuration.appInfo
 
     val appConfig = new ApplicationConfig()
@@ -102,7 +100,6 @@ object Server extends Logging {
   }
 
   private def createServiceRegistryConfig(configuration: Configuration): RegistryConfig = {
-    import com.github.chitralverma.vanilla.schnapps.config.models.ServiceRegistryConfigModel
     val serviceRegistryConfigOpt: Option[ServiceRegistryConfigModel] =
       configuration.serverConfig.serviceRegistryConfig
     val registryConfig = new RegistryConfig()
@@ -169,6 +166,8 @@ object Server extends Logging {
 
         if (p.server.isDefined) {
           protocolConfig.setServer(p.server.get)
+        } else if (p.protocol == ProtocolEnums.rest) {
+          protocolConfig.setServer("netty") // todo move to enums
         }
 
         if (configuration.serverConfig.maxConnections.isDefined) {
@@ -203,6 +202,9 @@ object Server extends Logging {
   private def createServices(
       configuration: Configuration,
       protocolConfigs: Map[String, ProtocolConfig]): Seq[ServiceConfig[_]] = {
+    if (configuration.services.isEmpty) {
+      logger.info("No services were defined.")
+    }
 
     val serviceConfigs: Seq[ServiceConfig[Any]] = configuration.services.map(definition => {
       protocolConfigs.get(definition.protocolName) match {
