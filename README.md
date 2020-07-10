@@ -1,7 +1,7 @@
 ![Scale](src/main/resources/logo.png)
 ====
 
-[![codecov](https://codecov.io/gh/chitralverma/vanilla-schnapps/branch/master/graph/badge.svg?token=19E1FcjGTQ)](https://codecov.io/gh/chitralverma/vanilla-schnapps)
+![Maven Package](https://github.com/chitralverma/vanilla-schnapps/workflows/Maven%20Package/badge.svg) [![codecov](https://codecov.io/gh/chitralverma/vanilla-schnapps/branch/master/graph/badge.svg?token=19E1FcjGTQ)](https://codecov.io/gh/chitralverma/vanilla-schnapps)
 
 
 > A clever exaggeration of apps-in-a-snap.
