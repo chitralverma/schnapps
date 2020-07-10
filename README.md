@@ -67,33 +67,16 @@ In `Scala` projects,
 // Pass the location of the above JSON config as first argument 
 val config = ConfigParser.parse(args);
 ```
+A complete config template is available [here](src/main/resources/rest-services-full-config.json) 
 
 Note: `Configuration` is a singleton. That means, once it's parsed, you can refer to it anywhere in the code statically 
 by `ConfigParser.getConfiguration()`.
 
-##### Establishing connection to Externals
-
-In `Java` projects,
-```$xslt
-
-```
-
-In `Scala` projects,
-```$xslt
-
-```
-
 ##### Writing your first service
 
-In `Java` projects,
-```$xslt
+For `Java` projects, the examples are available [here](src/test/java/com/github/chitralverma/vanilla/schnapps/services)
 
-```
-
-In `Scala` projects,
-```$xslt
-
-```
+For `Scala` projects, the examples are available [here](src/test/scala/com/github/chitralverma/vanilla/schnapps/services)
 
 ##### Running the Server
 After the configuration has been successfully initialized (see [here](#configuring-the-project)), boot up the server(s)
@@ -117,6 +100,7 @@ You can head over to the Wiki for more advanced topics like,
  - Configuring Authentication
  - Configuring Authorization
  - Configuring the Server
+ - Configuring the Externals
  - Slim ORM 
  - Service Discovery & Load Balancing
  - Implementing Custom externals 
