@@ -19,41 +19,46 @@ package com.github.chitralverma.vanilla.schnapps.internal
 import com.github.chitralverma.vanilla.schnapps.enums.HTTPMethodsEnums
 import javax.ws.rs._
 import javax.ws.rs.core.{Context, Response}
-import org.jboss.resteasy.spi.{HttpRequest, HttpResponse}
+import org.apache.shiro.subject.Subject
+import org.apache.shiro.SecurityUtils
+import org.jboss.resteasy.spi.HttpRequest
 
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
-// import org.apache.shiro.subject.Subject
 
 trait RestService extends Logging {
 
+  protected val DefaultResponse: Response =
+    Response.status(Response.Status.NOT_IMPLEMENTED).entity("NOT IMPLEMENTED").build()
+
   @GET @POST @PUT @DELETE @HEAD @OPTIONS
-  protected def onRequest(
-      @Context request: HttpRequest,
-      @Context response: HttpResponse): Unit = {
+  protected def onRequest(@Context request: HttpRequest): Response = {
     val reqMethod: String = request.getHttpMethod
+
+    request.setAttribute("req_obj", this)
 
     logger.debug(
       s"New Request with method '$reqMethod' received at path ${request.getUri.getPath}")
     Try { HTTPMethodsEnums.withName(reqMethod) } match {
-      case Success(HTTPMethodsEnums.GET) => get(request, response)
-      case Success(HTTPMethodsEnums.POST) => post(request, response)
-      case Success(_) => unknown(request, response)
+      case Success(HTTPMethodsEnums.GET) => get(request)
+      case Success(HTTPMethodsEnums.POST) => post(request)
+      case Success(_) => unknown(request)
       case Failure(ex) =>
         logger.error(ex.getMessage, ex)
-        unknown(request, response)
+        unknown(request)
     }
   }
 
-  private def unknown(request: HttpRequest, response: HttpResponse): Unit = {
+  private def unknown(request: HttpRequest): Response = {
     val errorMsg = s"Request with invalid method '${request.getHttpMethod}' received"
     logger.error(errorMsg, new IllegalStateException())
 
-    response.sendError(Response.Status.BAD_REQUEST.getStatusCode, errorMsg)
+    Response.status(Response.Status.BAD_REQUEST.getStatusCode).entity(errorMsg).build()
   }
 
-  def get(request: HttpRequest, response: HttpResponse): Unit = {}
-  def post(request: HttpRequest, response: HttpResponse): Unit = {}
+  def get(request: HttpRequest): Response = DefaultResponse
+
+  def post(request: HttpRequest): Response = DefaultResponse
 
   def getRequestBody(request: HttpRequest): Option[String] = {
     Try {
@@ -70,5 +75,11 @@ trait RestService extends Logging {
         None
     }
   }
+
+}
+
+trait CustomSubject {
+
+  def getSubject(request: HttpRequest): Subject = SecurityUtils.getSubject
 
 }

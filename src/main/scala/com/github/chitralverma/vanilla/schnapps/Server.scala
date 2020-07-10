@@ -23,18 +23,22 @@ import com.github.chitralverma.vanilla.schnapps.config.Configuration
 import com.github.chitralverma.vanilla.schnapps.config.models._
 import com.github.chitralverma.vanilla.schnapps.enums.ProtocolEnums
 import com.github.chitralverma.vanilla.schnapps.internal.{Constants => Cnsnts, _}
+import com.github.chitralverma.vanilla.schnapps.security.SecurityFeature
 import com.github.chitralverma.vanilla.schnapps.utils.Utils
 import org.apache.dubbo.config._
 import org.apache.dubbo.config.bootstrap.DubboBootstrap
+import org.apache.shiro.SecurityUtils
+import org.apache.shiro.env.BasicIniEnvironment
+import org.apache.shiro.mgt.SecurityManager
 
 import scala.collection.JavaConverters._
 
 object Server extends Logging {
 
   private var _serverInstance: DubboBootstrap = _
-//  private var _securityManagerInstance: Option[SecurityManager] = _
+  private var _securityManagerInstance: Option[SecurityManager] = _
 
-//  def getSecurityManager: Option[SecurityManager] = _securityManagerInstance
+  def getSecurityManager: Option[SecurityManager] = _securityManagerInstance
 
   def bootUp(configuration: Configuration): Unit = {
     if (_serverInstance == null) {
@@ -51,14 +55,15 @@ object Server extends Logging {
           .services(serviceConfigs.asJava)
       }
 
-//      _securityManagerInstance = serverConfigs.shiroINIPath.map(path => {
-//        import org.apache.shiro.SecurityUtils
-//        logger.info(s"Configuring Shiro Security using config at path '$path'")
-//        val securityManager = new BasicIniEnvironment(path).getSecurityManager
-//
-//        SecurityUtils.setSecurityManager(securityManager)
-//        securityManager
-//      })
+      _securityManagerInstance = configuration.serverConfig.shiroIniPath.map(path => {
+
+        logger.info(s"Configuring Shiro Security using config at path '$path'")
+        val securityManager: SecurityManager =
+          new BasicIniEnvironment(path).getSecurityManager
+
+        SecurityUtils.setSecurityManager(securityManager)
+        securityManager
+      })
 
       _serverInstance.start()
 
@@ -163,6 +168,7 @@ object Server extends Logging {
         protocolConfig.setName(p.protocol.toString)
         protocolConfig.setContextpath(p.contextPath)
         protocolConfig.setAccesslog(configuration.serverConfig.logAccess.toString)
+        protocolConfig.setExtension(classOf[SecurityFeature].getCanonicalName)
 
         if (p.server.isDefined) {
           protocolConfig.setServer(p.server.get)
@@ -221,7 +227,7 @@ object Server extends Logging {
             s"${definition.protocolName}:${definition.className}:${definition.version}")
 
           if (definition.version.isDefined) {
-            serviceConfig.setVersion(definition.version.get)
+            serviceConfig.setVersion(s"${definition.version.get}_${definition.className}")
           }
 
           logger.info(

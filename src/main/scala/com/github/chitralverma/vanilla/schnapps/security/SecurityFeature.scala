@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package com.github.chitralverma.vanilla.schnapps.config.models
+package com.github.chitralverma.vanilla.schnapps.security
 
-import com.github.chitralverma.vanilla.schnapps.internal.RestService
+import javax.ws.rs.core.{Feature, FeatureContext}
 
-case class ServiceDefinitionModel(
-    version: Option[String],
-    className: String,
-    interfaceName: Option[String] = Some(classOf[RestService].getCanonicalName),
-    protocolName: String) {}
+import scala.util.Try
+
+/**
+ * Borrowed from Shiro JAX-RS module.
+ */
+class SecurityFeature extends Feature {
+  override def configure(context: FeatureContext): Boolean = {
+    Try {
+      context.register(classOf[SecurityExceptionMapper])
+      context.register(classOf[AnnotationFilterFeature])
+    }.toOption.isDefined
+  }
+}

@@ -55,7 +55,7 @@
         <spec2.version>4.2.0</spec2.version>
         <json4s.version>3.2.11</json4s.version>
         <airframe-logger.version>20.5.1</airframe-logger.version>
-        <shiro.version>3.1.4</shiro.version>
+        <shiro.version>1.5.3</shiro.version>
         <dubbo.version>2.7.7</dubbo.version>
     </properties>
 
@@ -86,6 +86,14 @@
             <type>pom</type>
         </dependency>
 
+        <!--        Shiro Dependencies-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-all</artifactId>
+            <version>${shiro.version}</version>
+            <type>pom</type>
+        </dependency>
+
         <dependency>
             <groupId>org.wvlet.airframe</groupId>
             <artifactId>airframe-log_${scala.binary.version}</artifactId>
@@ -99,9 +107,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.clapper</groupId>
-            <artifactId>classutil_${scala.binary.version}</artifactId>
-            <version>1.5.1</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.49</version>
         </dependency>
 
         <dependency>

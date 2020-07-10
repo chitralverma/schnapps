@@ -22,7 +22,6 @@ import com.github.chitralverma.vanilla.schnapps.enums._
 import com.github.chitralverma.vanilla.schnapps.internal.Logging
 import com.github.chitralverma.vanilla.schnapps.utils.Utils
 import com.github.chitralverma.vanilla.schnapps.utils.Utils.withTry
-import org.clapper.classutil.ClassFinder
 import org.json4s.{file2JsonInput, DefaultFormats, Formats}
 import org.json4s.ext.EnumNameSerializer
 import org.json4s.jackson.JsonMethods.{parse => jsonParse}
@@ -35,7 +34,6 @@ object ConfigParser extends Logging {
   new EnumNameSerializer(SerializationEnums)
 
   private var _instance: Configuration = _
-  final val classFinder: ClassFinder = ClassFinder()
 
   def parse(args: Array[String]): Configuration = {
     Utils.printLogo()
