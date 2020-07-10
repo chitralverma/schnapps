@@ -11,6 +11,7 @@
     "threads": 200,
     "ioThreads": 8,
     "maxConnections": 100,
+    "shiroIniPath": "src/main/resources/shiro.ini",
     "serviceRegistryConfig": {
       "address": "zookeeper://127.0.0.1:2181",
       "client": "curator",
@@ -38,17 +39,13 @@
   "services": [
     {
       "version": "1.0",
-      "interface": "com.github.chitralverma.vanilla.schnapps.internal.RestService",
       "protocolName": "rest_protocol_1",
-      "path": "test",
-      "className": "com.github.chitralverma.vanilla.schnapps.JDBCService"
+      "className": "com.github.chitralverma.vanilla.schnapps.services.JDBCService"
     },
     {
-      "version": "2.0",
-      "interface": "com.github.chitralverma.vanilla.schnapps.internal.RestService",
-      "protocolName": "rest_protocol_2",
-      "path": "test",
-      "className": "com.github.chitralverma.vanilla.schnapps.JDBCService"
+      "version": "1.0",
+      "protocolName": "rest_protocol_1",
+      "className": "com.github.chitralverma.vanilla.schnapps.services.LoginService"
     }
   ],
   "externalConfigs": [

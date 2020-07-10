@@ -15,10 +15,8 @@
   "services": [
     {
       "version": "1.0",
-      "interface": "com.github.chitralverma.vanilla.schnapps.internal.RestService",
       "protocolName": "rest_protocol_1",
-      "path": "test",
-      "className": "com.github.chitralverma.vanilla.schnapps.MyService"
+      "className": "com.github.chitralverma.vanilla.schnapps.services.PingService"
     }
   ]
 }

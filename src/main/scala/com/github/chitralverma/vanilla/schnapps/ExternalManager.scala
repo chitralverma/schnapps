@@ -16,22 +16,24 @@
 
 package com.github.chitralverma.vanilla.schnapps
 
-import com.github.chitralverma.vanilla.schnapps.config.ConfigParser
+import com.github.chitralverma.vanilla.schnapps.config.{ConfigParser, Configuration}
 import com.github.chitralverma.vanilla.schnapps.config.models.ExternalConfig
-import com.github.chitralverma.vanilla.schnapps.internal.{External, Logging}
+import com.github.chitralverma.vanilla.schnapps.internal.{External, ExternalMarker, Logging}
 import com.github.chitralverma.vanilla.schnapps.utils.Utils
-import org.clapper.classutil.ClassFinder
+import org.reflections.Reflections
+
+import scala.collection.JavaConverters._
 
 object ExternalManager extends Logging {
 
   private var _managerInstance: Seq[External] = _
 
-  def loadExternals(): Seq[External] = {
+  def loadExternals(config: Configuration): Seq[External] = {
     if (_managerInstance == null) {
       _managerInstance = {
-        val classes: Map[String, String] = scanExternals(ConfigParser.classFinder)
+        val classes: Map[String, String] = scanExternals()
         val externalConfigs: Seq[(ExternalConfig, Option[String])] =
-          ConfigParser.getConfiguration.externalConfigs.map(ec => (ec, classes.get(ec.tpe)))
+          config.externalConfigs.map(ec => (ec, classes.get(ec.tpe)))
 
         val (availExtSeq, nAvailExtSeq) = externalConfigs.partition(_._2.nonEmpty)
         if (nAvailExtSeq.nonEmpty) {
@@ -67,15 +69,13 @@ object ExternalManager extends Logging {
     _managerInstance
   }
 
-  private def scanExternals(finder: ClassFinder): Map[String, String] = {
-    import com.github.chitralverma.vanilla.schnapps.internal.Constants
-    ClassFinder
-      .concreteSubclasses(classOf[External].getCanonicalName, finder.getClasses())
-      .flatMap(x =>
-        x.annotations.flatMap(_.params).toMap.get(Constants.Type) match {
-          case Some(tpe) => Some(Utils.lower(tpe.toString), x.name)
-          case None => None
-        })
+  private def scanExternals(): Map[String, String] = {
+    val reflections = new Reflections("")
+    reflections
+      .getSubTypesOf(classOf[External])
+      .asScala
+      .map(x =>
+        (x.getDeclaredAnnotationsByType(classOf[ExternalMarker]).head.tpe(), x.getCanonicalName))
       .toMap
   }
 
