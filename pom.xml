@@ -8,15 +8,14 @@
 
     <name>${project.artifactId}</name>
     <description>
-        Schnapps is a precise toolkit to rapidly develop production-grade,
-        self-contained WebApps and REST APIs over HTTP and WebSockets.
+        Schnapps is a precise toolkit to rapidly develop production-grade, secure and self-contained WebApps and REST APIs over HTTP and WebSockets.
     </description>
     <inceptionYear>2020</inceptionYear>
 
     <licenses>
         <license>
             <name>Apache 2.0 License</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -34,6 +33,12 @@
         <system>Github Issues</system>
         <url>https://github.com/chitralverma/vanilla-schnapps/issues</url>
     </issueManagement>
+
+    <scm>
+        <connection>scm:git:git://github.com/chitralverma/vanilla-schnapps.git</connection>
+        <developerConnection>scm:git:ssh://github.com:chitralverma/vanilla-schnapps.git</developerConnection>
+        <url>https://github.com/chitralverma/vanilla-schnapps/tree/master</url>
+    </scm>
 
     <properties>
         <encoding>UTF-8</encoding>
@@ -58,6 +63,19 @@
         <shiro.version>1.5.3</shiro.version>
         <dubbo.version>2.7.7</dubbo.version>
     </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+
+        <repository>
+            <id>ossrh-release</id>
+            <name>Central Repository OSSRH</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -94,6 +112,8 @@
             <type>pom</type>
         </dependency>
 
+        <!--        Misc Dependencies-->
+
         <dependency>
             <groupId>org.wvlet.airframe</groupId>
             <artifactId>airframe-log_${scala.binary.version}</artifactId>
@@ -104,13 +124,6 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>3.4.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.16</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -126,42 +139,58 @@
         </dependency>
 
         <!-- Test Dependencies -->
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.16</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${scala.binary.version}</artifactId>
             <version>3.0.5</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.specs2</groupId>
             <artifactId>specs2-core_${scala.binary.version}</artifactId>
             <version>${spec2.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.specs2</groupId>
             <artifactId>specs2-junit_${scala.binary.version}</artifactId>
             <version>${spec2.version}</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
+
         <sourceDirectory>src/main/scala</sourceDirectory>
         <testSourceDirectory>src/test/scala</testSourceDirectory>
+
         <plugins>
+
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.1.0</version>
@@ -180,7 +209,6 @@
             </plugin>
 
             <plugin>
-                <!-- see http://davidb.github.com/scala-maven-plugin -->
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
                 <version>4.4.0</version>
@@ -202,6 +230,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -225,6 +254,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -255,6 +285,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
