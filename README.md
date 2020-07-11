@@ -1,9 +1,6 @@
 ![Scale](src/main/resources/logo.png)
 ====
 
-![Maven Package](https://github.com/chitralverma/vanilla-schnapps/workflows/Maven%20Package/badge.svg) [![codecov](https://codecov.io/gh/chitralverma/vanilla-schnapps/branch/master/graph/badge.svg?token=19E1FcjGTQ)](https://codecov.io/gh/chitralverma/vanilla-schnapps)
-
-
 > A clever exaggeration of apps-in-a-snap.
 >
 > _Noun_:  A type of alcoholic beverage that may take several forms.   
