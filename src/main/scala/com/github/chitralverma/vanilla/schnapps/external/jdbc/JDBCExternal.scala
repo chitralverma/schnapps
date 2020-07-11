@@ -52,7 +52,7 @@ case class JDBCExternal(ec: ExternalConfig) extends External(ec) {
 
   override def connect(): Singleton[HikariDataSource] = {
     val source = new HikariDataSource(createHikariConfig())
-    assert(source.isRunning, "Connection initialised but not running")
+    assert(!source.isClosed, "Connection initialised but not running")
 
     Singleton(source)
   }
