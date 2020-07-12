@@ -50,15 +50,15 @@
         <provided.scope>compile</provided.scope>
         <scalafmt.parameters>--diff --test</scalafmt.parameters>
         <scalafmt.skip>false</scalafmt.skip>
-        <argLine>-ea -Dfile.encoding=${encoding} -Xms256m -Xmx4g -Xss4m -XX:ReservedCodeCacheSize=1g</argLine>
 
         <java.version>1.8</java.version>
         <json4s.version>3.5.3</json4s.version>
         <scalastyle.version>1.0.0</scalastyle.version>
         <scalafmt.version>1.0.3</scalafmt.version>
         <scala.binary.version>2.12</scala.binary.version>
-        <scala.version>${scala.binary.version}.10</scala.version>
+        <scala.version>${scala.binary.version}.3</scala.version>
         <spec2.version>4.2.0</spec2.version>
+        <scoverage.plugin.version>1.4.0</scoverage.plugin.version>
         <json4s.version>3.2.11</json4s.version>
         <airframe-logger.version>20.5.1</airframe-logger.version>
         <shiro.version>1.5.3</shiro.version>
@@ -194,6 +194,12 @@
         <plugins>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+            </plugin>
+
+            <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
@@ -214,6 +220,18 @@
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
                 <version>4.4.0</version>
+                <configuration>
+                    <jvmArgs>
+                        <jvmArg>-Xms64m</jvmArg>
+                        <jvmArg>-Xmx1024m</jvmArg>
+                    </jvmArgs>
+                    <args>
+                        <arg>-deprecation</arg>
+                        <arg>-feature</arg>
+                        <arg>-unchecked</arg>
+                    </args>
+                    <checkMultipleScalaVersions>true</checkMultipleScalaVersions>
+                </configuration>
                 <executions>
                     <execution>
                         <id>scala-compile-first</id>
@@ -281,7 +299,6 @@
                         <include>**/*Suite.java</include>
                     </includes>
                     <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-                    <argLine>${argLine}</argLine>
                     <useSystemClassLoader>true</useSystemClassLoader>
                     <forkMode>once</forkMode>
                     <failIfNoTests>false</failIfNoTests>
@@ -308,7 +325,7 @@
                     <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                     <junitxml>.</junitxml>
                     <filereports>TestSuiteReport.txt</filereports>
-                    <argLine>${argLine}</argLine>
+<!--                    <argLine>${argLine}</argLine>-->
                     <stderr/>
                 </configuration>
                 <executions>
@@ -319,6 +336,38 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.2</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.scoverage</groupId>
+                <artifactId>scoverage-maven-plugin</artifactId>
+                <version>${scoverage.plugin.version}</version>
+                <configuration>
+                    <scalaVersion>${scala.version}</scalaVersion>
+                    <aggregate>true</aggregate>
+                    <highlighting>true</highlighting>
+                </configuration>
             </plugin>
 
             <!-- Code Standardization -->
@@ -372,4 +421,24 @@
 
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.scoverage</groupId>
+                <artifactId>scoverage-maven-plugin</artifactId>
+                <version>${scoverage.plugin.version}</version>
+                <configuration>
+                    <aggregate>true</aggregate>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
