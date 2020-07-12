@@ -80,6 +80,7 @@ object Server extends Logging {
     assert(instance.isDefined, "Server has not been booted up yet. Use `Server.bootUp(...)`.")
 
     _serverInstance.await()
+    logger.info("Server is now awaiting requests.")
   }
 
   private def createAppConfig(configuration: Configuration): ApplicationConfig = {

@@ -35,49 +35,61 @@ Getting started with Schnapps is as straight-forward as it can get, as exactly 3
 ### Get Schnapps
 To get Schnapps, you need to add its dependency according to your build tool.
 
-For Maven based projects,
-```$xslt
-
-```
-
-For sbt based projects,
-```$xslt
-
-```
-
-For Gradle based projects,
-```$xslt
-
-```
+ - For Maven-based projects, add the following repository and dependency to your `pom.xml`
+     ```$xslt
+      <repositories>
+         ...
+         
+         <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+         </repository>
+   
+         ...
+      </repositories>
+     ```
+ 
+    ```$xslt
+     <dependencies>
+        ...
+   
+        <dependency>
+            <groupId>com.github.chitralverma</groupId>
+            <artifactId>vanilla-schnapps</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        
+        ...
+     </dependencies>
+    ```
 
 ### Use Schnapps
 Depending on whether you use Schnapps in `Scala` or `Java` project, the usage syntax changes ever so slightly.
 
 ##### Configuring the project
-Use the minimum configuration template available [here](src/main/resources/rest-services-min-config.json) and follow 
-the steps below,
+Use the minimum configuration template available [here](src/main/resources/rest-services-min-config.json) and pass the 
+location of the JSON config file as the first argument to the program. To initialize the config, follow the steps below,
 
 In `Java` projects,
 ```$xslt
-// Pass the location of the above JSON config as first argument 
 Configuration config = ConfigParser.parse(args); 
 ```
 
 In `Scala` projects,
 ```$xslt
-// Pass the location of the above JSON config as first argument 
-val config = ConfigParser.parse(args);
+val config: Configuration = ConfigParser.parse(args);
 ```
-A complete config template is available [here](src/main/resources/rest-services-full-config.json) 
 
-Note: `Configuration` is a singleton. That means, once it's parsed, you can refer to it anywhere in the code statically 
+**Note:** 
+ - `Configuration` is a singleton. That means, once it's parsed, you can refer to it anywhere in the code statically 
 by `ConfigParser.getConfiguration()`.
+ - A complete config template is available [here](src/main/resources/rest-services-full-config.json).
 
 ##### Writing your first service
 
-For `Java` projects, the examples are available [here](src/test/java/com/github/chitralverma/vanilla/schnapps/services)
+For `Java` projects, the examples are available [here](src/test/java/com/github/chitralverma/vanilla/schnapps/services).
 
-For `Scala` projects, the examples are available [here](src/test/scala/com/github/chitralverma/vanilla/schnapps/services)
+For `Scala` projects, the examples are available [here](src/test/scala/com/github/chitralverma/vanilla/schnapps/services).
 
 ##### Running the Server
 After the configuration has been successfully initialized (see [here](#configuring-the-project)), boot up the server(s)
@@ -88,7 +100,7 @@ In `Java` & `Scala` projects,
 Server.bootUp(config);
 ```
 This will load the different entities mentioned in the configuration like Application information, Service Registry, Protocols
-and Services. To hold the server(s) till they are given an explicit termination signal, do,
+and Services. To await the server(s) till they are given an explicit termination signal, do,
 
 In `Java` & `Scala` projects,
 ```$xslt
@@ -97,12 +109,10 @@ Server.await();
 
 ### Advanced Topics
 
-You can head over to the Wiki for more advanced topics like,
+You can head over to the [Wiki](https://github.com/chitralverma/vanilla-schnapps/wiki) for more advanced topics like,
  - Configuring Authentication
- - Configuring Authorization
  - Configuring the Server
  - Configuring the Externals
- - Slim ORM 
  - Service Discovery & Load Balancing
  - Implementing Custom externals 
  
