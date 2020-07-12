@@ -222,7 +222,7 @@ object Server extends Logging {
               .getInstance(definition.className, c => c.getDeclaredConstructor().newInstance()))
 
           serviceConfig.setInterface(
-            definition.interfaceName.getOrElse(classOf[RestService].getCanonicalName))
+            definition.interfaceName.getOrElse(classOf[Service].getCanonicalName))
           serviceConfig.setId(
             s"${definition.protocolName}:${definition.className}:${definition.version}")
 

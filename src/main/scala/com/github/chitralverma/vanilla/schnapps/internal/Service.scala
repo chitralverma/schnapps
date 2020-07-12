@@ -26,16 +26,18 @@ import org.jboss.resteasy.spi.HttpRequest
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
-trait RestService extends Logging {
+trait Service {
+  @GET @POST @PUT @DELETE @HEAD @OPTIONS
+  def onRequest(@Context request: HttpRequest): Response
+}
+
+abstract class RestService extends Logging with Service {
 
   protected val DefaultResponse: Response =
     Response.status(Response.Status.NOT_IMPLEMENTED).entity("NOT IMPLEMENTED").build()
 
-  @GET @POST @PUT @DELETE @HEAD @OPTIONS
-  protected def onRequest(@Context request: HttpRequest): Response = {
+  override def onRequest(request: HttpRequest): Response = {
     val reqMethod: String = request.getHttpMethod
-
-    request.setAttribute("req_obj", this)
 
     logger.debug(
       s"New Request with method '$reqMethod' received at path ${request.getUri.getPath}")

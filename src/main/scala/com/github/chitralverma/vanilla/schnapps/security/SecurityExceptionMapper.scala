@@ -34,9 +34,9 @@ class SecurityExceptionMapper extends Logging with ExceptionMapper[ShiroExceptio
   override def toResponse(exception: ShiroException): Response = {
     import org.apache.shiro.session.SessionException
     val status: Status = exception match {
+      case _: HostUnauthorizedException => Status.UNAUTHORIZED
       case _: UnauthorizedException => Status.UNAUTHORIZED
       case _: UnauthenticatedException => Status.UNAUTHORIZED
-      case _: HostUnauthorizedException => Status.UNAUTHORIZED
       case _: SessionException => Status.UNAUTHORIZED
       case _ => Status.FORBIDDEN
     }

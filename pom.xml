@@ -8,7 +8,8 @@
 
     <name>${project.artifactId}</name>
     <description>
-        Schnapps is a precise toolkit to rapidly develop production-grade, secure and self-contained WebApps and REST APIs over HTTP and WebSockets.
+        Schnapps is a precise toolkit to rapidly develop production-grade, secure and self-contained WebApps and REST
+        APIs over HTTP and WebSockets.
     </description>
     <inceptionYear>2020</inceptionYear>
 
@@ -66,13 +67,14 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh-snapshots</id>
+            <id>ossrh</id>
+            <name>Central Repository OSSRH - Snapshots</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
 
         <repository>
-            <id>ossrh-releases</id>
-            <name>Central Repository OSSRH</name>
+            <id>ossrh</id>
+            <name>Central Repository OSSRH - Releases</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
@@ -253,6 +255,18 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
             </plugin>
 
             <plugin>

@@ -16,10 +16,10 @@
 
 package com.github.chitralverma.vanilla.schnapps.config.models
 
-import com.github.chitralverma.vanilla.schnapps.internal.RestService
+import com.github.chitralverma.vanilla.schnapps.internal.Service
 
 case class ServiceDefinitionModel(
     version: Option[String],
     className: String,
-    interfaceName: Option[String] = Some(classOf[RestService].getCanonicalName),
+    interfaceName: Option[String] = Some(classOf[Service].getCanonicalName),
     protocolName: String) {}
