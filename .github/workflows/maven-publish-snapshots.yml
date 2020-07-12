@@ -41,8 +41,10 @@ jobs:
           flags: unittests
           fail_ci_if_error: true
 
+      - run: mkdir staging && cp target/*.jar staging
+
       - name: Publish to Github Packages
-        run: mkdir -p staging && cp target/*.jar staging
+        uses: actions/upload-artifact@v1
         with:
           name: Package
           path: staging
