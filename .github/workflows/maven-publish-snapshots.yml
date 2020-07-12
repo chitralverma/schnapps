@@ -33,7 +33,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build Package
-          run: mvn -B package --file pom.xml
+        run: mvn -B package --file pom.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
@@ -42,11 +42,11 @@ jobs:
           fail_ci_if_error: true
 
       - name: Publish to Github Packages
-          run: mkdir -p staging && cp target/*.jar staging
-          uses: actions/cache@v2
-          with:
-            name: Package
-            path: staging
+        run: mkdir -p staging && cp target/*.jar staging
+        uses: actions/cache@v2
+        with:
+          name: Package
+          path: staging
 
       - name: Publish to OSS Sonatype
         run: mvn -B deploy
