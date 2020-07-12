@@ -43,7 +43,6 @@ jobs:
 
       - name: Publish to Github Packages
         run: mkdir -p staging && cp target/*.jar staging
-        uses: actions/cache@v2
         with:
           name: Package
           path: staging
