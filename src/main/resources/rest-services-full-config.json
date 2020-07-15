@@ -7,7 +7,8 @@
   },
   "serverConfig": {
     "host": "0.0.0.0",
-    "logAccess": "true",
+    "logAccess": true,
+    "logErrors": true,
     "threads": 200,
     "ioThreads": 8,
     "maxConnections": 100,

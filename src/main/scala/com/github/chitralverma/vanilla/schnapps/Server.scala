@@ -168,7 +168,6 @@ object Server extends Logging {
         protocolConfig.setPort(p.port)
         protocolConfig.setName(p.protocol.toString)
         protocolConfig.setContextpath(p.contextPath)
-        protocolConfig.setAccesslog(configuration.serverConfig.logAccess.toString)
         protocolConfig.setExtension(classOf[SecurityFeature].getCanonicalName)
 
         if (p.server.isDefined) {
