@@ -20,7 +20,8 @@ import com.github.chitralverma.vanilla.schnapps.internal.Constants
 
 case class ServerConfigModel(
     host: String,
-    logAccess: Boolean = Constants.False,
+    logAccess: Boolean = Constants.True,
+    logErrors: Boolean = Constants.True,
     enableQOS: Boolean = Constants.False,
     threads: Option[Int] = None,
     maxPayloadBytes: Option[Int] = None,

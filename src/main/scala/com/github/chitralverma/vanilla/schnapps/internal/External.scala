@@ -30,7 +30,7 @@ abstract class External(config: ExternalConfig) extends Logging {
   final private val _instance: Singleton[T] = Try(connect()) match {
     case Success(i) => i
     case Failure(e) =>
-      logger.error("Error occured while connecting to External", e)
+      logger.error("Error occurred while connecting to External", e)
       throw e
   }
 

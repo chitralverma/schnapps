@@ -14,38 +14,42 @@
  * limitations under the License.
  */
 
-package com.github.chitralverma.vanilla.schnapps.security
+package com.github.chitralverma.vanilla.schnapps.internal
 
-import com.github.chitralverma.vanilla.schnapps.internal.Logging
+import com.github.chitralverma.vanilla.schnapps.config.ConfigParser
 import javax.ws.rs.core.{Context, Response}
 import javax.ws.rs.core.Response.Status
-import javax.ws.rs.ext.ExceptionMapper
-import org.apache.shiro.ShiroException
+import javax.ws.rs.ext.{ExceptionMapper => JaxRSExpMapper}
+import javax.ws.rs.NotFoundException
 import org.apache.shiro.authz._
+import org.apache.shiro.session.SessionException
 import org.jboss.resteasy.spi.HttpRequest
 
 /**
  * Borrowed from Shiro JAX-RS module.
  */
-class SecurityExceptionMapper extends Logging with ExceptionMapper[ShiroException] {
+class ExceptionMapper extends Logging with JaxRSExpMapper[Exception] {
 
   @Context var request: HttpRequest = _
 
-  override def toResponse(exception: ShiroException): Response = {
-    import org.apache.shiro.session.SessionException
+  override def toResponse(exception: Exception): Response = {
+    import org.apache.shiro.ShiroException
     val status: Status = exception match {
       case _: HostUnauthorizedException => Status.UNAUTHORIZED
       case _: UnauthorizedException => Status.UNAUTHORIZED
       case _: UnauthenticatedException => Status.UNAUTHORIZED
       case _: SessionException => Status.UNAUTHORIZED
-      case _ => Status.FORBIDDEN
+      case _: ShiroException => Status.FORBIDDEN
+      case _: NotFoundException => Status.NOT_FOUND
+      case _ => Status.INTERNAL_SERVER_ERROR
     }
 
-    logger.error(
-      s"Encountered exception of type '${exception.getClass.getCanonicalName}' " +
-        s"at path '${request.getUri.getPath}' with message '${exception.getMessage}'",
-      exception)
-
+    if (ConfigParser.getConfiguration.serverConfig.logErrors) {
+      logger.error(
+        s"Encountered exception of type '${exception.getClass.getCanonicalName}' " +
+          s"at path '${request.getUri.getPath}' with message '${exception.getMessage}'",
+        exception)
+    }
     Response.status(status).build
   }
 }

@@ -16,6 +16,7 @@
 
 package com.github.chitralverma.vanilla.schnapps.security
 
+import com.github.chitralverma.vanilla.schnapps.internal.ExceptionMapper
 import javax.ws.rs.core.{Feature, FeatureContext}
 
 import scala.util.Try
@@ -26,7 +27,7 @@ import scala.util.Try
 class SecurityFeature extends Feature {
   override def configure(context: FeatureContext): Boolean = {
     Try {
-      context.register(classOf[SecurityExceptionMapper])
+      context.register(classOf[ExceptionMapper])
       context.register(classOf[AnnotationFilterFeature])
     }.toOption.isDefined
   }

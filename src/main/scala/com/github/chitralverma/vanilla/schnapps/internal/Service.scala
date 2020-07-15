@@ -16,6 +16,7 @@
 
 package com.github.chitralverma.vanilla.schnapps.internal
 
+import com.github.chitralverma.vanilla.schnapps.config.ConfigParser
 import com.github.chitralverma.vanilla.schnapps.enums.HTTPMethodsEnums
 import javax.ws.rs._
 import javax.ws.rs.core.{Context, Response}
@@ -39,8 +40,11 @@ abstract class RestService extends Logging with Service {
   override def onRequest(request: HttpRequest): Response = {
     val reqMethod: String = request.getHttpMethod
 
-    logger.debug(
-      s"New Request with method '$reqMethod' received at path ${request.getUri.getPath}")
+    if (ConfigParser.getConfiguration.serverConfig.logAccess) {
+      logger.info(
+        s"New Request with method '$reqMethod' received at path ${request.getUri.getPath}")
+    }
+
     Try { HTTPMethodsEnums.withName(reqMethod) } match {
       case Success(HTTPMethodsEnums.GET) => get(request)
       case Success(HTTPMethodsEnums.POST) => post(request)
