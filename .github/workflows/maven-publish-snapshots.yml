@@ -5,7 +5,11 @@ name: Maven Publish Snapshots
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
@@ -20,10 +24,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-          server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
-          #         settings-path: ${{ github.workspace }} # location for the settings.xml file
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
 
       - name: Cache Maven packages
         uses: actions/cache@v2
@@ -33,7 +33,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build Package
-        run: mvn -B package --file pom.xml
+        run: mvn -B clean package --file pom.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
@@ -42,16 +42,3 @@ jobs:
           fail_ci_if_error: true
 
       - run: mkdir staging && cp target/*.jar staging
-
-      - name: Publish to Github Packages
-        uses: actions/upload-artifact@v1
-        with:
-          name: Package
-          path: staging
-
-      - name: Publish to OSS Sonatype
-        run: mvn -B deploy
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}

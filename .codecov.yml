@@ -4,16 +4,16 @@ coverage:
     patch:
       default:
         target: auto
-        base: auto 
+        base: auto
         if_no_uploads: success        # todo: change to error once coverage is available
         if_not_found: success         # todo: change to error once coverage is available
         if_ci_failed: error
         only_pulls: false
-        
+
 comment:
   layout: "reach, diff, flags, files"
   behavior: default
   require_changes: false
-  require_base: no                    # todo: change to error once coverage is available
-  require_head: no                    # todo: change to error once coverage is available
+  require_base: false                    # todo: change to error once coverage is available
+  require_head: false                 # todo: change to error once coverage is available
   
