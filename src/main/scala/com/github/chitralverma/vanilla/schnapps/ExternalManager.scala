@@ -17,7 +17,7 @@
 package com.github.chitralverma.vanilla.schnapps
 
 import com.github.chitralverma.vanilla.schnapps.config.{ConfigParser, Configuration}
-import com.github.chitralverma.vanilla.schnapps.config.models.ExternalConfig
+import com.github.chitralverma.vanilla.schnapps.config.models.ExternalConfigModel
 import com.github.chitralverma.vanilla.schnapps.internal.{External, ExternalMarker, Logging}
 import com.github.chitralverma.vanilla.schnapps.utils.Utils
 import org.reflections.Reflections
@@ -32,7 +32,7 @@ object ExternalManager extends Logging {
     if (_managerInstance == null) {
       _managerInstance = {
         val classes: Map[String, String] = scanExternals()
-        val externalConfigs: Seq[(ExternalConfig, Option[String])] =
+        val externalConfigs: Seq[(ExternalConfigModel, Option[String])] =
           config.externalConfigs.map(ec => (ec, classes.get(ec.tpe)))
 
         val (availExtSeq, nAvailExtSeq) = externalConfigs.partition(_._2.nonEmpty)
@@ -51,7 +51,7 @@ object ExternalManager extends Logging {
               Utils.getInstance[External](
                 ec._2.get,
                 c =>
-                  c.getDeclaredConstructor(classOf[ExternalConfig])
+                  c.getDeclaredConstructor(classOf[ExternalConfigModel])
                     .newInstance(ec._1)
                     .asInstanceOf[External]))
 
@@ -90,7 +90,7 @@ object ExternalManager extends Logging {
     _managerInstance
   }
 
-  def getExternalConfig(tpe: String): Option[ExternalConfig] =
+  def getExternalConfig(tpe: String): Option[ExternalConfigModel] =
     ConfigParser.getConfiguration.externalConfigs.find(_.tpe.matches(tpe))
 
 }

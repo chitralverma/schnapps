@@ -19,7 +19,7 @@ package com.github.chitralverma.vanilla.schnapps.external.jdbc
 import java.sql.Connection
 import java.util.Properties
 
-import com.github.chitralverma.vanilla.schnapps.config.models.ExternalConfig
+import com.github.chitralverma.vanilla.schnapps.config.models.ExternalConfigModel
 import com.github.chitralverma.vanilla.schnapps.internal.{External, ExternalMarker, Singleton}
 import com.github.chitralverma.vanilla.schnapps.utils.Utils
 import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
@@ -28,7 +28,7 @@ import com.zaxxer.hikari.util.PropertyElf
 import scala.collection.JavaConverters._
 
 @ExternalMarker(tpe = JDBCExternal.Jdbc)
-case class JDBCExternal(ec: ExternalConfig) extends External(ec) {
+case class JDBCExternal(ec: ExternalConfigModel) extends External(ec) {
 
   override type T = HikariDataSource
   override type E = Connection

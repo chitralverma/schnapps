@@ -20,6 +20,7 @@ import com.github.chitralverma.vanilla.schnapps.config.models._
 
 case class Configuration(
     appInfo: AppInfoModel,
+    appConfig: Map[String, Object],
     serverConfig: ServerConfigModel,
     services: Seq[ServiceDefinitionModel],
-    externalConfigs: Seq[ExternalConfig])
+    externalConfigs: Seq[ExternalConfigModel])

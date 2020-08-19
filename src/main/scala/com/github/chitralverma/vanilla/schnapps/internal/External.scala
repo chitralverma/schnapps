@@ -16,11 +16,11 @@
 
 package com.github.chitralverma.vanilla.schnapps.internal
 
-import com.github.chitralverma.vanilla.schnapps.config.models.ExternalConfig
+import com.github.chitralverma.vanilla.schnapps.config.models.ExternalConfigModel
 
 import scala.util.{Failure, Success, Try}
 
-abstract class External(config: ExternalConfig) extends Logging {
+abstract class External(config: ExternalConfigModel) extends Logging {
 
   type T
   type E
