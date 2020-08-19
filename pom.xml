@@ -39,13 +39,13 @@
 
     <issueManagement>
         <system>Github Issues</system>
-        <url>https://github.com/chitralverma/vanilla-schnapps/issues</url>
+        <url>https://github.com/chitralverma/schnapps/issues</url>
     </issueManagement>
 
     <scm>
-        <connection>scm:git:git://github.com/chitralverma/vanilla-schnapps.git</connection>
-        <developerConnection>scm:git:ssh://github.com:chitralverma/vanilla-schnapps.git</developerConnection>
-        <url>https://github.com/chitralverma/vanilla-schnapps/tree/master</url>
+        <connection>scm:git:git://github.com/chitralverma/schnapps.git</connection>
+        <developerConnection>scm:git:ssh://github.com:chitralverma/schnapps.git</developerConnection>
+        <url>https://github.com/chitralverma/schnapps/tree/master</url>
     </scm>
 
     <properties>
@@ -508,6 +508,17 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.scalastyle</groupId>
+                    <artifactId>scalastyle-maven-plugin</artifactId>
+                    <version>1.0.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.antipathy</groupId>
+                    <artifactId>mvn-scalafmt_${scala.binary.version}</artifactId>
+                    <version>${scalafmt.version}</version>
+                </plugin>
 
 
                 <!--                <plugin>-->
@@ -607,11 +618,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
 
-            <!--            <plugin>-->
-            <!--                <groupId>org.scalatest</groupId>-->
-            <!--                <artifactId>scalatest-maven-plugin</artifactId>-->
-            <!--            </plugin>-->
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -627,53 +633,6 @@
                                 <exclude>log4j.properties</exclude>
                             </excludes>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.scalastyle</groupId>
-                <artifactId>scalastyle-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <configuration>
-                    <verbose>false</verbose>
-                    <failOnViolation>true</failOnViolation>
-                    <includeTestSourceDirectory>false</includeTestSourceDirectory>
-                    <failOnWarning>false</failOnWarning>
-                    <sourceDirectory>${basedir}/src/main/scala</sourceDirectory>
-                    <testSourceDirectory>${basedir}/src/test/scala</testSourceDirectory>
-                    <configLocation>scalastyle-config.xml</configLocation>
-                    <outputFile>${basedir}/target/scalastyle-output.xml</outputFile>
-                    <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
-                    <outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.antipathy</groupId>
-                <artifactId>mvn-scalafmt_${scala.binary.version}</artifactId>
-                <version>${scalafmt.version}</version>
-                <configuration>
-                    <configLocation>${basedir}/.scalafmt.conf</configLocation> <!-- path to config -->
-                    <skipTestSources>${scalafmt.skip}</skipTestSources> <!-- (Optional) skip formatting test sources -->
-                    <skipSources>${scalafmt.skip}</skipSources> <!-- (Optional) skip formatting main sources -->
-                    <respectVersion>false</respectVersion> <!-- (Optional) fail if no version set in scalafmt.conf -->
-                    <validateOnly>false</validateOnly> <!-- check formatting without changing files -->
-                    <onlyChangedFiles>true</onlyChangedFiles>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

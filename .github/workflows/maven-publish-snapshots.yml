@@ -33,7 +33,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build Package
-        run: mvn -B package --file pom.xml
+        run: mvn -B clean package --file pom.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1

@@ -16,12 +16,12 @@
     {
       "version": "1.0",
       "protocolName": "rest_protocol_1",
-      "className": "com.github.chitralverma.vanilla.schnapps.examples.services.JDBCService"
+      "className": "com.github.chitralverma.schnapps.examples.services.JDBCService"
     },
     {
       "version": "1.0",
       "protocolName": "rest_protocol_1",
-      "className": "com.github.chitralverma.vanilla.schnapps.examples.services.PingService"
+      "className": "com.github.chitralverma.schnapps.examples.services.PingService"
     }
   ]
 }

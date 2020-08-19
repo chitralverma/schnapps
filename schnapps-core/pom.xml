@@ -186,8 +186,30 @@
             </plugin>
 
             <plugin>
+                <groupId>org.antipathy</groupId>
+                <artifactId>mvn-scalafmt_${scala.binary.version}</artifactId>
+                <configuration>
+                    <configLocation>.scalafmt.conf</configLocation> <!-- path to config -->
+                    <skipTestSources>${scalafmt.skip}</skipTestSources> <!-- (Optional) skip formatting test sources -->
+                    <skipSources>${scalafmt.skip}</skipSources> <!-- (Optional) skip formatting main sources -->
+                    <respectVersion>false</respectVersion> <!-- (Optional) fail if no version set in scalafmt.conf -->
+                    <validateOnly>false</validateOnly> <!-- check formatting without changing files -->
+                    <onlyChangedFiles>true</onlyChangedFiles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.scalastyle</groupId>
                 <artifactId>scalastyle-maven-plugin</artifactId>
+                <version>1.0.0</version>
                 <configuration>
                     <verbose>false</verbose>
                     <failOnViolation>true</failOnViolation>
@@ -202,29 +224,9 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <phase>compile</phase>
                         <goals>
                             <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.antipathy</groupId>
-                <artifactId>mvn-scalafmt_${scala.binary.version}</artifactId>
-                <configuration>
-                    <configLocation>.scalafmt.conf</configLocation> <!-- path to config -->
-                    <skipTestSources>${scalafmt.skip}</skipTestSources> <!-- (Optional) skip formatting test sources -->
-                    <skipSources>${scalafmt.skip}</skipSources> <!-- (Optional) skip formatting main sources -->
-                    <respectVersion>false</respectVersion> <!-- (Optional) fail if no version set in scalafmt.conf -->
-                    <validateOnly>false</validateOnly> <!-- check formatting without changing files -->
-                    <onlyChangedFiles>true</onlyChangedFiles>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>format</goal>
                         </goals>
                     </execution>
                 </executions>

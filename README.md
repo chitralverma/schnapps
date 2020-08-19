@@ -1,8 +1,8 @@
-![Scale](src/main/resources/logo.png)
+![Schnapps](logo.png)
 ====
 
-![Maven Publish Snapshots](https://github.com/chitralverma/vanilla-schnapps/workflows/Maven%20Publish%20Snapshots/badge.svg?branch=master)
-[![codecov](https://codecov.io/gh/chitralverma/vanilla-schnapps/branch/master/graph/badge.svg)](https://codecov.io/gh/chitralverma/vanilla-schnapps)
+![Maven Publish Snapshots](https://github.com/chitralverma/schnapps/workflows/Maven%20Publish%20Snapshots/badge.svg?branch=master)
+[![codecov](https://codecov.io/gh/chitralverma/schnapps/branch/master/graph/badge.svg)](https://codecov.io/gh/chitralverma/schnapps)
 
 
 > A clever exaggeration of apps-in-a-snap.
@@ -55,7 +55,7 @@ To get Schnapps, you need to add its dependency according to your build tool.
    
         <dependency>
             <groupId>com.github.chitralverma</groupId>
-            <artifactId>vanilla-schnapps</artifactId>
+            <artifactId>schnapps-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         
@@ -67,7 +67,7 @@ To get Schnapps, you need to add its dependency according to your build tool.
 Depending on whether you use Schnapps in `Scala` or `Java` project, the usage syntax changes ever so slightly.
 
 ##### Configuring the project
-Use the minimum configuration template available [here](src/main/resources/rest-services-min-config.json) and pass the 
+Use the minimum configuration template available [here](schnapps-examples/src/main/resources/rest-services-min-config.json) and pass the 
 location of the JSON config file as the first argument to the program. To initialize the config, follow the steps below,
 
 In `Java` projects,
@@ -83,13 +83,13 @@ val config: Configuration = ConfigParser.parse(args);
 **Note:** 
  - `Configuration` is a singleton. That means, once it's parsed, you can refer to it anywhere in the code statically 
 by `ConfigParser.getConfiguration()`.
- - A complete config template is available [here](src/main/resources/rest-services-full-config.json).
+ - A complete config template is available [here](schnapps-examples/src/main/resources/rest-services-full-config.json).
 
 ##### Writing your first service
 
-For `Java` projects, the examples are available [here](src/test/java/com/github/chitralverma/vanilla/schnapps/services).
+For `Java` projects, the examples are available [here](schnapps-examples/src/main/java).
 
-For `Scala` projects, the examples are available [here](src/test/scala/com/github/chitralverma/vanilla/schnapps/services).
+For `Scala` projects, the examples are available [here](schnapps-examples/src/main/scala).
 
 ##### Running the Server
 After the configuration has been successfully initialized (see [here](#configuring-the-project)), boot up the server(s)
@@ -109,7 +109,7 @@ Server.await();
 
 ### Advanced Topics
 
-You can head over to the [Wiki](https://github.com/chitralverma/vanilla-schnapps/wiki) for more advanced topics like,
+You can head over to the [Wiki](https://github.com/chitralverma/schnapps/wiki) for more advanced topics like,
  - Configuring Authentication
  - Configuring the Server
  - Configuring the Externals
