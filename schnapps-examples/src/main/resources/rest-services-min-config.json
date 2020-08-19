@@ -1,0 +1,27 @@
+{
+  "appInfo": {
+    "name": "first-schnapps-min"
+  },
+  "serverConfig": {
+    "host": "0.0.0.0",
+    "protocolConfigs": [
+      {
+        "name": "rest_protocol_1",
+        "protocol": "rest",
+        "port": 1506
+      }
+    ]
+  },
+  "services": [
+    {
+      "version": "1.0",
+      "protocolName": "rest_protocol_1",
+      "className": "com.github.chitralverma.vanilla.schnapps.examples.services.JDBCService"
+    },
+    {
+      "version": "1.0",
+      "protocolName": "rest_protocol_1",
+      "className": "com.github.chitralverma.vanilla.schnapps.examples.services.PingService"
+    }
+  ]
+}
