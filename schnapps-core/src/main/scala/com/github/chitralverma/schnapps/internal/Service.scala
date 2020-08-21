@@ -48,6 +48,9 @@ abstract class RestService extends Logging with Service {
     Try { HTTPMethodsEnums.withName(reqMethod) } match {
       case Success(HTTPMethodsEnums.GET) => get(request)
       case Success(HTTPMethodsEnums.POST) => post(request)
+      case Success(HTTPMethodsEnums.OPTIONS) => options(request)
+      case Success(HTTPMethodsEnums.DELETE) => delete(request)
+      case Success(HTTPMethodsEnums.PUT) => put(request)
       case Success(_) => unknown(request)
       case Failure(ex) =>
         logger.error(ex.getMessage, ex)
@@ -65,6 +68,12 @@ abstract class RestService extends Logging with Service {
   def get(request: HttpRequest): Response = DefaultResponse
 
   def post(request: HttpRequest): Response = DefaultResponse
+
+  def options(request: HttpRequest): Response = DefaultResponse
+
+  def delete(request: HttpRequest): Response = DefaultResponse
+
+  def put(request: HttpRequest): Response = DefaultResponse
 
   def getRequestBody(request: HttpRequest): Option[String] = {
     Try {

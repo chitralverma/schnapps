@@ -47,7 +47,15 @@
         "contextPath": "v2",
         "serialization": "hessian2"
       }
-    ]
+    ],
+    "extensions": {
+      "corsOptions": {
+        "allowedOrigins": [
+          "*"
+        ],
+        "allowedMethods": "GET,POST,OPTIONS,PUT,DELETE"
+      }
+    }
   },
   "services": [
     {

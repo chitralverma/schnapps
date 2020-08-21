@@ -19,5 +19,5 @@ package com.github.chitralverma.schnapps.enums
 object HTTPMethodsEnums extends Enumeration {
   type HTTPMethod = Value
 
-  val GET, POST = Value
+  val GET, POST, OPTIONS, DELETE, PUT, HEAD = Value
 }
