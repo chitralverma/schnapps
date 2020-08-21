@@ -23,5 +23,17 @@
       "protocolName": "rest_protocol_1",
       "className": "com.github.chitralverma.schnapps.examples.services.PingService"
     }
+  ],
+  "externalConfigs": [
+    {
+      "name": "hsqldb_source",
+      "type": "jdbc",
+      "configs": {
+        "username": "SA",
+        "password": "",
+        "driverClassName": "org.hsqldb.jdbc.JDBCDriver",
+        "jdbcUrl": "jdbc:hsqldb:mem:testdb"
+      }
+    }
   ]
 }

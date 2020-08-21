@@ -20,9 +20,9 @@ import java.io.File
 import java.nio.file.Paths
 
 import com.github.chitralverma.schnapps.config.Configuration
+import com.github.chitralverma.schnapps.config.models._
 import com.github.chitralverma.schnapps.enums.ProtocolEnums
 import com.github.chitralverma.schnapps.internal.{Constants => Cnsnts, _}
-import com.github.chitralverma.schnapps.security.SecurityFeature
 import com.github.chitralverma.schnapps.utils.Utils
 import org.apache.dubbo.config._
 import org.apache.dubbo.config.bootstrap.DubboBootstrap
@@ -83,7 +83,6 @@ object Server extends Logging {
   }
 
   private def createAppConfig(configuration: Configuration): ApplicationConfig = {
-    import com.github.chitralverma.schnapps.config.models.AppInfoModel
     val appInfo: AppInfoModel = configuration.appInfo
 
     val appConfig = new ApplicationConfig()
@@ -106,7 +105,6 @@ object Server extends Logging {
   }
 
   private def createServiceRegistryConfig(configuration: Configuration): RegistryConfig = {
-    import com.github.chitralverma.schnapps.config.models.ServiceRegistryConfigModel
     val serviceRegistryConfigOpt: Option[ServiceRegistryConfigModel] =
       configuration.serverConfig.serviceRegistryConfig
     val registryConfig = new RegistryConfig()
@@ -169,7 +167,7 @@ object Server extends Logging {
         protocolConfig.setPort(p.port)
         protocolConfig.setName(p.protocol.toString)
         protocolConfig.setContextpath(p.contextPath)
-        protocolConfig.setExtension(classOf[SecurityFeature].getCanonicalName)
+        protocolConfig.setExtension(classOf[Extensions].getCanonicalName)
 
         if (p.server.isDefined) {
           protocolConfig.setServer(p.server.get)

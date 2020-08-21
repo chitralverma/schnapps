@@ -14,12 +14,12 @@
  *    limitations under the License.
  */
 
-package com.github.chitralverma.schnapps.security
+package com.github.chitralverma.schnapps.internal.filters.security
 
 import java.lang.annotation.Annotation
 
 import com.github.chitralverma.schnapps.internal.{CustomSubject, Logging}
-import com.github.chitralverma.schnapps.security.handlers._
+import com.github.chitralverma.schnapps.internal.filters.security.handlers._
 import javax.ws.rs.container._
 import javax.ws.rs.core.Context
 import org.apache.shiro.authz.annotation._

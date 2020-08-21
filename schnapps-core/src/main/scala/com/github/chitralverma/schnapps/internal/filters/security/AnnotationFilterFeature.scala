@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.chitralverma.schnapps.security
+package com.github.chitralverma.schnapps.internal.filters.security
 
 import java.lang.annotation.Annotation
 

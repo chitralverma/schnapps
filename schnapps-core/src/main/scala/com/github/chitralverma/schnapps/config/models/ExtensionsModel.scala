@@ -14,21 +14,8 @@
  *    limitations under the License.
  */
 
-package com.github.chitralverma.schnapps.security
+package com.github.chitralverma.schnapps.config.models
 
-import javax.ws.rs.core.{Feature, FeatureContext}
-
-import scala.util.Try
-
-/**
- * Borrowed from Shiro JAX-RS module.
- */
-class SecurityFeature extends Feature {
-  override def configure(context: FeatureContext): Boolean = {
-    Try {
-      import com.github.chitralverma.schnapps.internal.ExceptionMapper
-      context.register(classOf[ExceptionMapper])
-      context.register(classOf[AnnotationFilterFeature])
-    }.toOption.isDefined
-  }
-}
+case class ExtensionsModel(
+    corsOptions: Map[String, Object] = Map.empty,
+    filters: Seq[String] = Seq.empty) {}

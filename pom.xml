@@ -431,7 +431,7 @@
                     <executions>
                         <execution>
                             <id>default-deploy</id>
-                            <phase>none</phase>
+                            <phase>deploy</phase>
                         </execution>
                     </executions>
                 </plugin>

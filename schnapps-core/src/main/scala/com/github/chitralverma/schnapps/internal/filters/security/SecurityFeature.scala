@@ -14,18 +14,23 @@
  *    limitations under the License.
  */
 
-package com.github.chitralverma.schnapps.examples.services
+package com.github.chitralverma.schnapps.internal.filters.security
 
-import com.github.chitralverma.schnapps.internal.RestService
-import javax.ws.rs.Path
-import javax.ws.rs.core.Response
-import org.jboss.resteasy.spi.HttpRequest
+import com.github.chitralverma.schnapps.internal.ExceptionMapper
+import javax.ws.rs.core.{Feature, FeatureContext}
 
-@Path("ping")
-class PingService extends RestService {
+import scala.util.Try
 
-  override def get(request: HttpRequest): Response = {
-    Response.ok.entity("""{"result":"pong"}""").build()
+/**
+ * Borrowed from Shiro JAX-RS module.
+ */
+class SecurityFeature extends Feature {
+
+  override def configure(context: FeatureContext): Boolean = {
+    Try {
+      context.register(classOf[ExceptionMapper])
+      context.register(classOf[AnnotationFilterFeature])
+    }.toOption.isDefined
   }
 
 }

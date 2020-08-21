@@ -29,4 +29,5 @@ case class ServerConfigModel(
     maxConnections: Option[Int] = None,
     shiroIniPath: Option[String] = None,
     serviceRegistryConfig: Option[ServiceRegistryConfigModel] = None,
-    protocolConfigs: Seq[ProtocolConfigModel]) {}
+    protocolConfigs: Seq[ProtocolConfigModel],
+    extensions: Option[ExtensionsModel] = None) {}
