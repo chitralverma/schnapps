@@ -17,7 +17,6 @@
 package com.github.chitralverma.schnapps.internal
 
 import com.github.chitralverma.schnapps.config.ConfigParser
-import com.github.chitralverma.schnapps.internal.filters.CORSFilterFeature
 import com.github.chitralverma.schnapps.internal.filters.security.SecurityFeature
 import javax.ws.rs.core.{Feature, FeatureContext}
 
@@ -32,7 +31,6 @@ class Extensions extends Feature {
   override def configure(context: FeatureContext): Boolean = {
     val preDefExts: Boolean = Try {
       context.register(classOf[SecurityFeature])
-      context.register(classOf[CORSFilterFeature])
     }.isSuccess
 
     val customExts: Boolean = Try {

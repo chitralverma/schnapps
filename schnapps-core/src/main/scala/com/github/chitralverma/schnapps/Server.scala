@@ -23,6 +23,7 @@ import com.github.chitralverma.schnapps.config.Configuration
 import com.github.chitralverma.schnapps.config.models._
 import com.github.chitralverma.schnapps.enums.ProtocolEnums
 import com.github.chitralverma.schnapps.internal.{Constants => Cnsnts, _}
+import com.github.chitralverma.schnapps.internal.filters.CORSFilter
 import com.github.chitralverma.schnapps.utils.Utils
 import org.apache.dubbo.config._
 import org.apache.dubbo.config.bootstrap.DubboBootstrap
@@ -167,7 +168,8 @@ object Server extends Logging {
         protocolConfig.setPort(p.port)
         protocolConfig.setName(p.protocol.toString)
         protocolConfig.setContextpath(p.contextPath)
-        protocolConfig.setExtension(classOf[Extensions].getCanonicalName)
+        protocolConfig.setExtension(
+          s"${classOf[Extensions].getCanonicalName},${classOf[CORSFilter].getCanonicalName}")
 
         if (p.server.isDefined) {
           protocolConfig.setServer(p.server.get)

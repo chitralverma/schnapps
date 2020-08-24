@@ -19,7 +19,6 @@
         <scalafmt.skip>false</scalafmt.skip>
     </properties>
 
-
     <dependencies>
 
         <dependency>

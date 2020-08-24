@@ -18,70 +18,68 @@ package com.github.chitralverma.schnapps.internal.filters
 
 import com.github.chitralverma.schnapps.config.ConfigParser
 import com.github.chitralverma.schnapps.config.models.ExtensionsModel
-import com.github.chitralverma.schnapps.internal.Logging
-import javax.ws.rs.container.{DynamicFeature, ResourceInfo}
-import javax.ws.rs.core.FeatureContext
-import javax.ws.rs.Priorities
-import org.jboss.resteasy.plugins.interceptors.CorsFilter
+import javax.ws.rs.container.PreMatching
+import org.jboss.resteasy.plugins.interceptors.{CorsFilter => InteralCorsFilter}
+import wvlet.log.LogSupport
 
 import scala.collection.JavaConverters._
 
 /**
  * Handles CORS requests both preflight and simple CORS requests.
+ * You must bind this as a singleton and set up allowedOrigins and other settings to use.
+ *
+ * Borrowed from org.jboss.resteasy.plugins.interceptors
+ * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  */
-object CORSFilterFeature {
+
+@PreMatching
+class CORSFilter extends InteralCorsFilter with LogSupport {
   final val AllowedOrigins: String = "allowedOrigins"
   final val AllowCredentials: String = "allowCredentials"
   final val AllowedHeaders: String = "allowedHeaders"
   final val AllowedMethods: String = "allowedMethods"
   final val CorsMaxAge: String = "corsMaxAge"
   final val ExposedHeaders: String = "exposedHeaders"
-}
 
-class CORSFilterFeature extends Logging with DynamicFeature {
-  import com.github.chitralverma.schnapps.internal.filters.CORSFilterFeature._
+  configure()
 
-  override def configure(resourceInfo: ResourceInfo, context: FeatureContext): Unit = {
-    val corsFilter = new CorsFilter()
-
+  def configure(): Unit = {
     ConfigParser.getConfiguration.serverConfig.extensions match {
       case Some(em: ExtensionsModel) =>
         debug("Found 'corsOptions' in extensions config.")
 
         if (em.corsOptions.contains(AllowedOrigins)) {
-          corsFilter.getAllowedOrigins
+          this.getAllowedOrigins
             .addAll(em.corsOptions(AllowedOrigins).asInstanceOf[Seq[String]].asJavaCollection)
         }
 
         if (em.corsOptions.contains(AllowCredentials)) {
-          corsFilter.setAllowCredentials(Boolean.unbox(em.corsOptions(AllowCredentials)))
+          this.setAllowCredentials(Boolean.unbox(em.corsOptions(AllowCredentials)))
         }
 
         if (em.corsOptions.contains(AllowCredentials)) {
-          corsFilter.setAllowCredentials(Boolean.unbox(em.corsOptions(AllowCredentials)))
+          this.setAllowCredentials(Boolean.unbox(em.corsOptions(AllowCredentials)))
         }
 
         if (em.corsOptions.contains(AllowedHeaders)) {
-          corsFilter.setAllowedHeaders(String.valueOf(em.corsOptions(AllowedHeaders)))
+          this.setAllowedHeaders(String.valueOf(em.corsOptions(AllowedHeaders)))
         }
 
         if (em.corsOptions.contains(AllowedMethods)) {
-          corsFilter.setAllowedMethods(String.valueOf(em.corsOptions(AllowedMethods)))
+          this.setAllowedMethods(String.valueOf(em.corsOptions(AllowedMethods)))
         }
 
         if (em.corsOptions.contains(CorsMaxAge)) {
-          corsFilter.setCorsMaxAge(Int.unbox(em.corsOptions(CorsMaxAge)))
+          this.setCorsMaxAge(Int.unbox(em.corsOptions(CorsMaxAge)))
         }
 
         if (em.corsOptions.contains(ExposedHeaders)) {
-          corsFilter.setExposedHeaders(String.valueOf(em.corsOptions(ExposedHeaders)))
+          this.setExposedHeaders(String.valueOf(em.corsOptions(ExposedHeaders)))
         }
 
       case None =>
         debug("No 'corsOptions' in extensions config.")
     }
 
-    context.register(corsFilter, Priorities.HEADER_DECORATOR)
   }
-
 }

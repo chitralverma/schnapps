@@ -23,13 +23,14 @@ import com.github.chitralverma.schnapps.external.jdbc.JDBCExternal
 import com.github.chitralverma.schnapps.internal.{CustomSubject, RestService}
 import javax.ws.rs.Path
 import javax.ws.rs.core.Response
+import org.apache.shiro.authz.annotation.RequiresAuthentication
 import org.apache.shiro.subject.Subject
 import org.jboss.resteasy.spi.HttpRequest
 
 import scala.collection.mutable.ArrayBuffer
 
 @Path("/tables")
-// @RequiresAuthentication
+@RequiresAuthentication
 class JDBCService extends RestService with CustomSubject {
 
   lazy val jdbcLink: JDBCExternal = ExternalManager
