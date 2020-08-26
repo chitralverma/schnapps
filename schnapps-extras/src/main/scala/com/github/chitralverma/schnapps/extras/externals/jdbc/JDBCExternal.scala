@@ -14,21 +14,22 @@
  *    limitations under the License.
  */
 
-package com.github.chitralverma.schnapps.external.jdbc
+package com.github.chitralverma.schnapps.extras.externals.jdbc
 
 import java.sql.Connection
 import java.util.Properties
 
 import com.github.chitralverma.schnapps.config.models.ExternalConfigModel
-import com.github.chitralverma.schnapps.internal.{External, ExternalMarker, Singleton}
+import com.github.chitralverma.schnapps.extras.externals.External
 import com.github.chitralverma.schnapps.utils.Utils
 import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 import com.zaxxer.hikari.util.PropertyElf
 
 import scala.collection.JavaConverters._
 
-@ExternalMarker(tpe = JDBCExternal.Jdbc)
-case class JDBCExternal(ec: ExternalConfigModel) extends External(ec) {
+class JDBCExternal extends External {
+
+  override val tpe: String = "jdbc"
 
   override type T = HikariDataSource
   override type E = Connection
@@ -36,7 +37,7 @@ case class JDBCExternal(ec: ExternalConfigModel) extends External(ec) {
   private final def supportedProperties: String =
     PropertyElf.getPropertyNames(classOf[HikariConfig]).asScala.mkString("[", ", ", "]")
 
-  private def createHikariConfig(): HikariConfig = {
+  private def createHikariConfig(ec: ExternalConfigModel): HikariConfig = {
     assert(ec.configs != null, "Provided config is 'null'")
     assert(
       ec.configs.nonEmpty,
@@ -50,25 +51,21 @@ case class JDBCExternal(ec: ExternalConfigModel) extends External(ec) {
       s"Illegal Argument: Supported properties:\n $supportedProperties")
   }
 
-  override def connect(): Singleton[HikariDataSource] = {
-    val source = new HikariDataSource(createHikariConfig())
+  override def connect(externalConfigModel: ExternalConfigModel): T = {
+    val source = new HikariDataSource(createHikariConfig(externalConfigModel))
     assert(!source.isClosed, "Connection initialised but not running")
 
-    Singleton(source)
+    source
   }
 
-  override def disconnect(): Unit = getAs[T].close()
+  override def disconnect(): Unit = getImpl.close()
 
   override def executeThis[O](f: Connection => O): O = {
-    val connection: Connection = getAs[T].getConnection
+    val connection: Connection = getImpl.getConnection
     val result: O = f(connection)
     connection.close()
 
     result
   }
-}
 
-object JDBCExternal {
-
-  final val Jdbc = "jdbc"
 }

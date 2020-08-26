@@ -31,9 +31,9 @@ object ConfigParser extends Logging {
   import com.github.chitralverma.schnapps.enums.HTTPMethodsEnums
 
   implicit var jsonFormat: Formats = DefaultFormats +
-    new EnumNameSerializer(ProtocolEnums)
-  new EnumNameSerializer(HTTPMethodsEnums)
-  new EnumNameSerializer(SerializationEnums)
+    new EnumNameSerializer(ProtocolEnums) +
+    new EnumNameSerializer(HTTPMethodsEnums) +
+    new EnumNameSerializer(SerializationEnums)
 
   private var _instance: Configuration = _
 
@@ -66,7 +66,7 @@ object ConfigParser extends Logging {
     val instance: Option[Configuration] = Option(_instance)
     assert(
       instance.isDefined,
-      "Unable to get an instance of Configuration as it hasn't been initialised yet")
+      "Unable to get an instance of Configuration as it hasn't been initialised yet.")
 
     instance.get
   }

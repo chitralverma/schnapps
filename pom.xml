@@ -73,6 +73,7 @@
         <airframe-logger.version>20.5.1</airframe-logger.version>
         <shiro.version>1.5.3</shiro.version>
         <dubbo.version>2.7.7</dubbo.version>
+        <hsqldb.version>2.5.1</hsqldb.version>
     </properties>
 
     <distributionManagement>

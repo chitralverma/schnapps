@@ -20,7 +20,7 @@ import com.github.chitralverma.schnapps.utils.Utils
 
 // todo check this config again
 case class ExternalConfigModel(
-    name: String = "undefined name",
+    name: String,
     private val `type`: String,
     configs: Map[String, String] = Map.empty) {
 

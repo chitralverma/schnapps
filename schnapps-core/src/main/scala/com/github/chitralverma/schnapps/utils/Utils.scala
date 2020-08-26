@@ -61,4 +61,20 @@ object Utils {
 
   def lower(str: String): String = str.toLowerCase(Locale.ROOT)
 
+  /**
+   * Get the main ClassLoader.
+   */
+  def getMainClassLoader: ClassLoader = getClass.getClassLoader
+
+  /**
+   * Get the Context ClassLoader on this thread or, if not present, the main ClassLoader.
+   *
+   * This should be used whenever passing a ClassLoader to Class.ForName or finding the currently
+   * active loader when setting up ClassLoader delegation chains.
+   *
+   * Borrowed from Apache Spark
+   */
+  def getContextOrMainClassLoader: ClassLoader =
+    Option(Thread.currentThread().getContextClassLoader).getOrElse(getMainClassLoader)
+
 }
