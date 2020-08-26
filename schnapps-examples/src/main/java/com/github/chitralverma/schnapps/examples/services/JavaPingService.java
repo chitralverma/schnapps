@@ -14,18 +14,19 @@
  *    limitations under the License.
  */
 
-package com.github.chitralverma.schnapps.examples.services
+package com.github.chitralverma.schnapps.examples.services;
 
-import com.github.chitralverma.schnapps.internal.RestService
-import javax.ws.rs.Path
-import javax.ws.rs.core.Response
-import org.jboss.resteasy.spi.HttpRequest
+import com.github.chitralverma.schnapps.internal.RestService;
+import org.jboss.resteasy.spi.HttpRequest;
+
+import javax.ws.rs.Path;
+import javax.ws.rs.core.Response;
 
 @Path("ping")
-class PingService extends RestService {
+public class JavaPingService extends RestService {
 
-  override def get(request: HttpRequest): Response = {
-    Response.ok.entity("""{"result":"pong"}""").build()
-  }
-
+    @Override
+    public Response get(HttpRequest request) {
+        return Response.ok().entity("{\"result\":\"pong\"}").build();
+    }
 }

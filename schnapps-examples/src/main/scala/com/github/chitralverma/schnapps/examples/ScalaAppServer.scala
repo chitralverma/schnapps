@@ -18,16 +18,16 @@ package com.github.chitralverma.schnapps.examples
 
 import com.github.chitralverma.schnapps.config.{ConfigParser, Configuration}
 import com.github.chitralverma.schnapps.Server
+import com.github.chitralverma.schnapps.examples.utils.EmbeddedDB
+import com.github.chitralverma.schnapps.extras.ExternalManager
 
-object Application {
+object ScalaAppServer {
 
   def main(args: Array[String]): Unit = {
     val configuration: Configuration = ConfigParser.parse(args)
 
     configuration.externalConfigs.find(_.name.matches("hsqldb_source")) match {
       case Some(ecm) =>
-        import com.github.chitralverma.schnapps.examples.utils.EmbeddedDB
-        import com.github.chitralverma.schnapps.ExternalManager
         EmbeddedDB.start(ecm.configs)
         ExternalManager.loadExternals(configuration)
       case None =>

@@ -1,0 +1,45 @@
+{
+  "appInfo": {
+    "name": "first-schnapps-min"
+  },
+  "serverConfig": {
+    "host": "0.0.0.0",
+    "protocolConfigs": [
+      {
+        "name": "rest_protocol_1",
+        "protocol": "rest",
+        "port": 1506,
+        "contextPath": "scala"
+      }
+    ]
+  },
+  "services": [
+    {
+      "version": "1.0",
+      "protocolName": "rest_protocol_1",
+      "className": "com.github.chitralverma.schnapps.examples.services.ScalaPingService"
+    },
+    {
+      "version": "1.0",
+      "protocolName": "rest_protocol_1",
+      "className": "com.github.chitralverma.schnapps.examples.services.ScalaLoginService"
+    },
+    {
+      "version": "1.0",
+      "protocolName": "rest_protocol_1",
+      "className": "com.github.chitralverma.schnapps.examples.services.ScalaJDBCService"
+    }
+  ],
+  "externalConfigs": [
+    {
+      "name": "hsqldb_source",
+      "type": "jdbc",
+      "configs": {
+        "username": "SA",
+        "password": "",
+        "driverClassName": "org.hsqldb.jdbc.JDBCDriver",
+        "jdbcUrl": "jdbc:hsqldb:mem:testdb"
+      }
+    }
+  ]
+}

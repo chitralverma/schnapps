@@ -16,46 +16,34 @@
 
 package com.github.chitralverma.schnapps.examples.services
 
-import java.sql.ResultSet
-
-import com.github.chitralverma.schnapps.ExternalManager
-import com.github.chitralverma.schnapps.external.jdbc.JDBCExternal
 import com.github.chitralverma.schnapps.internal.{CustomSubject, RestService}
-import javax.ws.rs.Path
+import javax.ws.rs._
 import javax.ws.rs.core.Response
-import org.apache.shiro.authz.annotation.RequiresAuthentication
+import org.apache.shiro.authc.UsernamePasswordToken
+import org.apache.shiro.authz.annotation.RequiresGuest
+import org.apache.shiro.SecurityUtils
 import org.apache.shiro.subject.Subject
 import org.jboss.resteasy.spi.HttpRequest
 
-import scala.collection.mutable.ArrayBuffer
-
-@Path("/tables")
-@RequiresAuthentication
-class JDBCService extends RestService with CustomSubject {
-
-  lazy val jdbcLink: JDBCExternal = ExternalManager
-    .getExternal[JDBCExternal]("hsqldb_source")
-    .get
+@Path("login")
+@RequiresGuest
+class ScalaLoginService extends RestService with CustomSubject {
 
   override def get(request: HttpRequest): Response = {
-    val arr: ArrayBuffer[String] = ArrayBuffer.empty[String]
+    val username: String = request.getHttpHeaders.getRequestHeader("user").get(0)
+    val password: String = request.getHttpHeaders.getRequestHeader("pass").get(0)
 
-    jdbcLink.executeThis(c => {
-      val query =
-        "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.SYSTEM_TABLES WHERE TABLE_TYPE='TABLE'"
-      val queryResult: ResultSet =
-        c.prepareStatement(query).executeQuery()
-      while (queryResult.next()) {
-        arr.append(queryResult.getString(1))
-      }
-    })
+    val token = new UsernamePasswordToken(username, password)
+    val sub: Subject = SecurityUtils.getSubject
+    sub.login(token)
 
-    Response.ok().entity(arr.mkString(", ")).build()
+    Response.ok.entity(s"Logged in with session ID: ${sub.getSession.getId}").build()
   }
+
+  override def post(request: HttpRequest): Response = DefaultResponse
 
   override def getSubject(request: HttpRequest): Subject = {
     val sessionID: String = request.getHttpHeaders.getRequestHeader("sessionID").get(0)
     new Subject.Builder().sessionId(sessionID).buildSubject()
   }
-
 }
