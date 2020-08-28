@@ -4,12 +4,12 @@
 
     <parent>
         <groupId>com.github.chitralverma</groupId>
-        <artifactId>schnapps-parent</artifactId>
+        <artifactId>schnapps-parent_2.11</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>schnapps-examples</artifactId>
+    <artifactId>schnapps-examples_2.11</artifactId>
     <name>${project.artifactId}</name>
     <version>1.0-SNAPSHOT</version>
 
@@ -18,26 +18,26 @@
     <dependencies>
         <dependency>
             <groupId>com.github.chitralverma</groupId>
-            <artifactId>schnapps-core</artifactId>
+            <artifactId>schnapps-core_2.11</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.chitralverma</groupId>
-            <artifactId>schnapps-extras</artifactId>
+            <artifactId>schnapps-extras_2.11</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.json4s</groupId>
-            <artifactId>json4s-jackson_2.12</artifactId>
-            <scope>compile</scope>
+            <artifactId>json4s-jackson_${scala.binary.version}</artifactId>
+            <scope>${compile.scope}</scope>
         </dependency>
 
         <dependency>
             <groupId>org.json4s</groupId>
-            <artifactId>json4s-ext_2.12</artifactId>
-            <scope>compile</scope>
+            <artifactId>json4s-ext_${scala.binary.version}</artifactId>
+            <scope>${compile.scope}</scope>
         </dependency>
 
         <dependency>

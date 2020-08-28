@@ -20,7 +20,6 @@ import java.io.File
 
 import com.github.chitralverma.schnapps.enums._
 import com.github.chitralverma.schnapps.internal.Logging
-import com.github.chitralverma.schnapps.utils.Utils
 import com.github.chitralverma.schnapps.utils.Utils.withTry
 import org.json4s.{file2JsonInput, DefaultFormats, Formats}
 import org.json4s.ext.EnumNameSerializer
@@ -38,7 +37,7 @@ object ConfigParser extends Logging {
   private var _instance: Configuration = _
 
   def parse(args: Array[String]): Configuration = {
-    Utils.printLogo()
+//    Utils.printLogo()
     if (_instance == null) {
       _instance = {
 

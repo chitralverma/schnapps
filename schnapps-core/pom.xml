@@ -4,12 +4,12 @@
 
     <parent>
         <groupId>com.github.chitralverma</groupId>
-        <artifactId>schnapps-parent</artifactId>
+        <artifactId>schnapps-parent_2.11</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>schnapps-core</artifactId>
+    <artifactId>schnapps-core_2.11</artifactId>
     <name>${project.artifactId}</name>
     <version>1.0-SNAPSHOT</version>
 

@@ -21,6 +21,7 @@
     "host": "0.0.0.0",
     "logAccess": true,
     "logErrors": true,
+    "enableQOS": false,
     "threads": 200,
     "ioThreads": 8,
     "maxConnections": 100,

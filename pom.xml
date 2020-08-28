@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.chitralverma</groupId>
-    <artifactId>schnapps-parent</artifactId>
+    <artifactId>schnapps-parent_2.11</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
@@ -62,12 +62,11 @@
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss z</maven.build.timestamp.format>
 
         <java.version>1.8</java.version>
-        <maven.version>3.6.3</maven.version>
-        <json4s.version>3.5.3</json4s.version>
+        <json4s.version>3.2.11</json4s.version>
         <scalastyle.version>1.0.0</scalastyle.version>
         <scalafmt.version>1.0.3</scalafmt.version>
-        <scala.binary.version>2.12</scala.binary.version>
-        <scala.version>${scala.binary.version}.6</scala.version>
+        <scala.binary.version>2.11</scala.binary.version>
+        <scala.version>${scala.binary.version}.12</scala.version>
         <spec2.version>4.2.0</spec2.version>
         <scoverage.plugin.version>1.4.0</scoverage.plugin.version>
         <airframe-logger.version>20.5.1</airframe-logger.version>
@@ -256,15 +255,12 @@
                             </goals>
                             <configuration>
                                 <rules>
-                                    <requireMavenVersion>
-                                        <version>${maven.version}</version>
-                                    </requireMavenVersion>
                                     <requireJavaVersion>
                                         <version>${java.version}</version>
                                     </requireJavaVersion>
                                     <bannedDependencies>
                                         <excludes>
-                                            <exclude>*:*_2.11</exclude>
+                                            <exclude>*:*_2.12</exclude>
                                             <exclude>*:*_2.10</exclude>
                                         </excludes>
                                         <searchTransitive>true</searchTransitive>
@@ -338,7 +334,7 @@
                     <configuration>
                         <scalaVersion>${scala.version}</scalaVersion>
                         <checkMultipleScalaVersions>true</checkMultipleScalaVersions>
-                        <failOnMultipleScalaVersions>true</failOnMultipleScalaVersions>
+<!--                        <failOnMultipleScalaVersions>true</failOnMultipleScalaVersions>-->
                         <recompileMode>incremental</recompileMode>
                         <args>
                             <arg>-unchecked</arg>
@@ -595,6 +591,66 @@
 
         </plugins>
     </build>
+
+    <profiles>
+
+        <profile>
+            <id>scala-2.11</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+
+        <profile>
+            <id>scala-2.12</id>
+            <properties>
+                <scala.binary.version>2.12</scala.binary.version>
+                <scala.version>${scala.binary.version}.6</scala.version>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-versions</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireJavaVersion>
+                                            <version>${java.version}</version>
+                                        </requireJavaVersion>
+                                        <bannedDependencies>
+                                            <excludes>
+                                                <exclude>*:*_2.11</exclude>
+                                                <exclude>*:*_2.10</exclude>
+                                            </excludes>
+                                            <searchTransitive>true</searchTransitive>
+                                        </bannedDependencies>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>enforce-no-duplicate-dependencies</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <banDuplicatePomDependencyVersions/>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
 
     <reporting>
         <plugins>
