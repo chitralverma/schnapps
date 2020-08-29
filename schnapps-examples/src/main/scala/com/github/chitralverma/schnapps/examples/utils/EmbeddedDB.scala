@@ -40,11 +40,11 @@ object EmbeddedDB extends Logging {
         sonicServer
       }
 
-      info("Starting Embedded DB.")
+      logInfo("Starting Embedded DB.")
       _instance.start()
       createTestTable(config("jdbcUrl"))
     } else {
-      warn("Embedded DB already running.")
+      logWarning("Embedded DB already running.")
     }
   }
 
@@ -68,15 +68,15 @@ object EmbeddedDB extends Logging {
           |PRIMARY KEY (id))""".stripMargin)
 
     } match {
-      case Success(_) => info("Test table created successfully.");
-      case Failure(ex) => error("Failure while creating test table", ex)
+      case Success(_) => logInfo("Test table created successfully.");
+      case Failure(ex) => logError("Failure while creating test table", ex)
     }
 
   }
 
   def stop(): Unit = {
     if (!_instance.isNotRunning) {
-      info("Stopping Embedded DB.")
+      logInfo("Stopping Embedded DB.")
       _instance.stop()
     }
   }

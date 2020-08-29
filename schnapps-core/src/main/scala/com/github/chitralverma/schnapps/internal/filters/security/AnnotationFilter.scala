@@ -75,13 +75,13 @@ class AnnotationFilter(val authzSpecs: Seq[Annotation], resourceInfo: ResourceIn
     val subject: Subject = Try(resource.asInstanceOf[CustomSubject].getSubject(request)) match {
       case Success(sub) => sub
       case Failure(exception: ClassCastException) =>
-        logger.error(
+        logError(
           s"Resource Class '${resourceInfo.getResourceClass}' " +
             s"does not implement ${classOf[CustomSubject].getCanonicalName}",
           exception)
         SecurityUtils.getSubject
       case Failure(_) =>
-        logger.warn("Error encountered while building Subject")
+        logWarning("Error encountered while building Subject")
         SecurityUtils.getSubject
     }
 

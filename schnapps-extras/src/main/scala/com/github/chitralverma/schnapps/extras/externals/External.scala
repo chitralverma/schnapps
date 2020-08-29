@@ -45,7 +45,7 @@ trait External extends Logging {
         setImpl(instance)
       } match {
         case Failure(exception) =>
-          logger.error(
+          logError(
             s"Exception occurred while initialising external" +
               s" with name '${externalConfigModel.name}'.")
           throw new IllegalStateException(exception)
@@ -63,7 +63,7 @@ trait External extends Logging {
     if (!_isInit) {
       _isInit = true
     } else {
-      logger.warn("External already initialised.")
+      logWarning("External already initialised.")
     }
   }
 
@@ -71,7 +71,7 @@ trait External extends Logging {
     if (_name == null) {
       _name = name
     } else {
-      logger.warn("Name is already set for External.")
+      logWarning("Name is already set for External.")
     }
   }
 
@@ -79,7 +79,7 @@ trait External extends Logging {
     if (_config == null) {
       _config = config
     } else {
-      logger.warn("Config is already set for external.")
+      logWarning("Config is already set for external.")
     }
   }
 
@@ -87,7 +87,7 @@ trait External extends Logging {
     if (_instance == null) {
       _instance = instance
     } else {
-      logger.warn("Instance is already initialised and set for External.")
+      logWarning("Instance is already initialised and set for External.")
     }
   }
 

@@ -57,7 +57,7 @@ object Server extends Logging {
 
       _securityManagerInstance = configuration.serverConfig.shiroIniPath.map(path => {
 
-        logger.info(s"Configuring Shiro Security using config at path '$path'")
+        logInfo(s"Configuring Shiro Security using config at path '$path'")
         val securityManager: SecurityManager =
           new BasicIniEnvironment(path).getSecurityManager
 
@@ -68,11 +68,11 @@ object Server extends Logging {
       _serverInstance.start()
 
       if (_serverInstance.isReady && _serverInstance.isStarted) {
-        logger.info("Server has started successfully and is ready for use. Use `Server.await()`.")
+        logInfo("Server has started successfully and is ready for use. Use `Server.await()`.")
       } else {
-        logger.error("Unable to start the server", throw new IllegalStateException())
+        logError("Unable to start the server", throw new IllegalStateException())
       }
-    } else logger.warn("Server is already running")
+    } else logWarning("Server is already running")
   }
 
   def await(): Unit = {
@@ -80,7 +80,7 @@ object Server extends Logging {
     assert(instance.isDefined, "Server has not been booted up yet. Use `Server.bootUp(...)`.")
 
     _serverInstance.await()
-    logger.info("Server is now awaiting requests.")
+    logInfo("Server is now awaiting requests.")
   }
 
   private def createAppConfig(configuration: Configuration): ApplicationConfig = {
@@ -153,7 +153,7 @@ object Server extends Logging {
     registryConfig.setGroup(
       serviceRegistryConfigOpt.flatMap(_.group).getOrElse(configuration.appInfo.name))
 
-    logger.info(
+    logInfo(
       s"Connected to a '${registryConfig.getProtocol}' service registry at " +
         s"address '${registryConfig.getAddress}'")
 
@@ -197,7 +197,7 @@ object Server extends Logging {
           protocolConfig.setSerialization(p.serialization.get.toString)
         }
 
-        logger.info(
+        logInfo(
           s"Created a '${p.protocol}' protocol with name '${p.name}' " +
             s"on host '${configuration.serverConfig.host}' port '${p.port}' and " +
             s"contextPath '${p.contextPath}'")
@@ -210,7 +210,7 @@ object Server extends Logging {
       configuration: Configuration,
       protocolConfigs: Map[String, ProtocolConfig]): Seq[ServiceConfig[_]] = {
     if (configuration.services.isEmpty) {
-      logger.info("No services were defined.")
+      logInfo("No services were defined.")
     }
 
     val serviceConfigs: Seq[ServiceConfig[Any]] = configuration.services.map(definition => {
@@ -231,7 +231,7 @@ object Server extends Logging {
             serviceConfig.setVersion(s"${definition.version.get}_${definition.className}")
           }
 
-          logger.info(
+          logInfo(
             s"Created service with protocol name '${definition.protocolName}' " +
               s"class name '${definition.className}' and version '${definition.version.getOrElse(
                 Cnsnts.EmptyString)}'")
@@ -239,7 +239,7 @@ object Server extends Logging {
           serviceConfig
         case None =>
           val exception = new IllegalArgumentException
-          logger.error(
+          logError(
             s"No protocol was defined with name '${definition.protocolName}' " +
               s"for service with class name '${definition.protocolName}'",
             exception)

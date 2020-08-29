@@ -69,7 +69,8 @@
         <scala.version>${scala.binary.version}.12</scala.version>
         <spec2.version>4.2.0</spec2.version>
         <scoverage.plugin.version>1.4.0</scoverage.plugin.version>
-        <airframe-logger.version>20.5.1</airframe-logger.version>
+        <slf4j.version>1.7.16</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
         <shiro.version>1.5.3</shiro.version>
         <dubbo.version>2.7.7</dubbo.version>
         <hsqldb.version>2.5.1</hsqldb.version>
@@ -128,12 +129,6 @@
             <!--        Misc Dependencies-->
 
             <dependency>
-                <groupId>org.wvlet.airframe</groupId>
-                <artifactId>airframe-log_${scala.binary.version}</artifactId>
-                <version>${airframe-logger.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
                 <version>3.4.5</version>
@@ -154,10 +149,36 @@
             </dependency>
 
             <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>8.0.16</version>
-                <scope>${provided.scope}</scope>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>${compile.scope}</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>${compile.scope}</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jul-to-slf4j</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+                <scope>${compile.scope}</scope>
             </dependency>
 
             <!-- Test Dependencies -->
@@ -334,7 +355,7 @@
                     <configuration>
                         <scalaVersion>${scala.version}</scalaVersion>
                         <checkMultipleScalaVersions>true</checkMultipleScalaVersions>
-<!--                        <failOnMultipleScalaVersions>true</failOnMultipleScalaVersions>-->
+                        <!--                        <failOnMultipleScalaVersions>true</failOnMultipleScalaVersions>-->
                         <recompileMode>incremental</recompileMode>
                         <args>
                             <arg>-unchecked</arg>

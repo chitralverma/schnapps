@@ -43,7 +43,7 @@ object ConfigParser extends Logging {
 
         val jobConfig: Configuration = if (args.headOption.isDefined) {
           val configPath: String = args(0)
-          logger.info(s"Attempting to load configuration from path: '$configPath'")
+          logInfo(s"Attempting to load configuration from path: '$configPath'")
           withTry(
             jsonParse(file2JsonInput(new File(configPath))).extract[Configuration],
             s"Fatal Error: Unable to initialize configuration from config at path: '$configPath'")
@@ -55,7 +55,7 @@ object ConfigParser extends Logging {
         jobConfig
       }
     } else {
-      logger.warn("Configuration is already initialised.")
+      logWarning("Configuration is already initialised.")
     }
 
     _instance

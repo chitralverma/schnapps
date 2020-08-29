@@ -45,7 +45,7 @@ class ExceptionMapper extends Logging with JaxRSExpMapper[Exception] {
     }
 
     if (ConfigParser.getConfiguration.serverConfig.logErrors) {
-      logger.error(
+      logError(
         s"Encountered exception of type '${exception.getClass.getCanonicalName}' " +
           s"at path '${request.getUri.getPath}' with message '${exception.getMessage}'",
         exception)

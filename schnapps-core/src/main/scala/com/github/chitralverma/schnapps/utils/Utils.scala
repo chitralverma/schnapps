@@ -45,9 +45,8 @@ object Utils {
       case Failure(ex) => throw new IllegalStateException(errorMsg, ex)
     }
 
-  // scalastyle:off classforname
   def getInstance[C](classToInstantiate: String, initializationBody: Class[_] => C): C = {
-    Try(initializationBody(Class.forName(classToInstantiate))) match {
+    Try(initializationBody(classForName(classToInstantiate))) match {
       case Success(c) => c
       case Failure(e: ClassNotFoundException) =>
         throw new ClassNotFoundException(
@@ -57,9 +56,15 @@ object Utils {
         throw new RuntimeException(s"Generic error trying to instantiate $classToInstantiate", e)
     }
   }
-  // scalastyle:on classforname
 
   def lower(str: String): String = str.toLowerCase(Locale.ROOT)
+
+  // scalastyle:off classforname
+  /** Preferred alternative to Class.forName(className) */
+  def classForName(className: String): Class[_] = {
+    Class.forName(className, true, getContextOrMainClassLoader)
+  }
+  // scalastyle:on classforname
 
   /**
    * Get the main ClassLoader.

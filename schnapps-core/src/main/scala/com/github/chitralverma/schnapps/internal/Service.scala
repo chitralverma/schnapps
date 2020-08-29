@@ -41,8 +41,7 @@ abstract class RestService extends Logging with Service {
     val reqMethod: String = request.getHttpMethod
 
     if (ConfigParser.getConfiguration.serverConfig.logAccess) {
-      logger.info(
-        s"New Request with method '$reqMethod' received at path ${request.getUri.getPath}")
+      logInfo(s"New Request with method '$reqMethod' received at path ${request.getUri.getPath}")
     }
 
     Try { HTTPMethodsEnums.withName(reqMethod) } match {
@@ -53,14 +52,14 @@ abstract class RestService extends Logging with Service {
       case Success(HTTPMethodsEnums.PUT) => put(request)
       case Success(_) => unknown(request)
       case Failure(ex) =>
-        logger.error(ex.getMessage, ex)
+        logError(ex.getMessage, ex)
         unknown(request)
     }
   }
 
   private def unknown(request: HttpRequest): Response = {
     val errorMsg = s"Request with invalid method '${request.getHttpMethod}' received"
-    logger.error(errorMsg, new IllegalStateException())
+    logError(errorMsg, new IllegalStateException())
 
     Response.status(Response.Status.BAD_REQUEST.getStatusCode).entity(errorMsg).build()
   }

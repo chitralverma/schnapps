@@ -18,9 +18,9 @@ package com.github.chitralverma.schnapps.internal.filters
 
 import com.github.chitralverma.schnapps.config.ConfigParser
 import com.github.chitralverma.schnapps.config.models.ExtensionsModel
+import com.github.chitralverma.schnapps.internal.Logging
 import javax.ws.rs.container.PreMatching
 import org.jboss.resteasy.plugins.interceptors.{CorsFilter => InteralCorsFilter}
-import wvlet.log.LogSupport
 
 import scala.collection.JavaConverters._
 
@@ -33,7 +33,11 @@ import scala.collection.JavaConverters._
  */
 
 @PreMatching
-class CORSFilter extends InteralCorsFilter with LogSupport {
+class CORSFilter extends InteralCorsFilter {
+  case object Logger extends Logging
+
+  import Logger._
+
   final val AllowedOrigins: String = "allowedOrigins"
   final val AllowCredentials: String = "allowCredentials"
   final val AllowedHeaders: String = "allowedHeaders"
@@ -46,7 +50,7 @@ class CORSFilter extends InteralCorsFilter with LogSupport {
   def configure(): Unit = {
     ConfigParser.getConfiguration.serverConfig.extensions match {
       case Some(em: ExtensionsModel) =>
-        debug("Found 'corsOptions' in extensions config.")
+        logDebug("Found 'corsOptions' in extensions config.")
 
         if (em.corsOptions.contains(AllowedOrigins)) {
           this.getAllowedOrigins
@@ -78,7 +82,7 @@ class CORSFilter extends InteralCorsFilter with LogSupport {
         }
 
       case None =>
-        debug("No 'corsOptions' in extensions config.")
+        logDebug("No 'corsOptions' in extensions config.")
     }
 
   }

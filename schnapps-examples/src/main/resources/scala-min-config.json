@@ -4,6 +4,7 @@
   },
   "serverConfig": {
     "host": "0.0.0.0",
+    "shiroIniPath": "schnapps-examples/src/main/resources/shiro.ini",
     "protocolConfigs": [
       {
         "name": "rest_protocol_1",

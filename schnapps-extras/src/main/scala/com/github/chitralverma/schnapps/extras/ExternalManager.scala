@@ -28,7 +28,6 @@ import scala.collection.JavaConverters._
 import scala.collection.concurrent.TrieMap
 import scala.util.{Failure, Success, Try}
 
-// scalastyle:off classforname
 object ExternalManager extends Logging {
 
   private var _managerInstance: TrieMap[String, External] = _
@@ -44,7 +43,7 @@ object ExternalManager extends Logging {
 
         val (availExtSeq, nAvailExtSeq) = externalConfigs.partition(_._2.nonEmpty)
         if (nAvailExtSeq.nonEmpty) {
-          logger.error(
+          logError(
             s"No implementation was found for provided External(s) with name(s) in" +
               s" ${nAvailExtSeq.map(_._1.name).mkString("['", "', '", "']")}")
 
@@ -55,7 +54,7 @@ object ExternalManager extends Logging {
         availExtSeq.foreach(x => x)
 
         val externals: Seq[(String, External)] = availExtSeq
-          .map(x => (x._1, Class.forName(x._2.get)))
+          .map(x => (x._1, Utils.classForName(x._2.get)))
           .map(ec =>
             (ec._1.name, {
               val external: External = ec._2.newInstance().asInstanceOf[External]
@@ -66,14 +65,15 @@ object ExternalManager extends Logging {
 
         availExtSeq.foreach(
           ec =>
-            logger.info(s"Configured an external with class name '${ec._2.get}', " +
-              s"type '${ec._1.tpe}' and given name '${ec._1.name}'"))
+            logInfo(
+              s"Configured an external with class name '${ec._2.get}', " +
+                s"type '${ec._1.tpe}' and given name '${ec._1.name}'"))
 
         TrieMap.empty[String, External] ++ externals
       }
 
-      logger.info("Externals loaded successfully")
-    } else logger.warn("Externals already loaded")
+      logInfo("Externals loaded successfully")
+    } else logWarning("Externals already loaded")
 
     _managerInstance
   }
@@ -110,7 +110,7 @@ object ExternalManager extends Logging {
           val internalSources: Seq[String] =
             impls.filter(_.getClass.getName.startsWith("com.github.chitralverma.schnapps"))
           if (internalSources.size == 1) {
-            warn(
+            logWarning(
               s"Multiple External implementations in classes [${sourceNames.mkString(", ")}] " +
                 s"found for given type '$tpe'. Defaulting to internal implementation " +
                 s"in class '${internalSources.head.getClass.getName}'.")
@@ -127,7 +127,7 @@ object ExternalManager extends Logging {
       .map(x => Utils.lower(x._1) -> x._2)
 
     classMap
-      .map(c => Class.forName(c._2))
+      .map(c => Utils.classForName(c._2))
       .foreach(cls =>
         assert(
           classOf[External].isAssignableFrom(cls),
@@ -138,7 +138,9 @@ object ExternalManager extends Logging {
   def getExternal[T](name: String): Option[T] = {
     Try(getExternals.get(Utils.lower(name)).map(_.as[T])) match {
       case Failure(exception) =>
-        error(s"Exception occurred while getting external instance with name '$name'", exception)
+        logError(
+          s"Exception occurred while getting external instance with name '$name'",
+          exception)
         None
       case Success(value) => value
     }
@@ -156,4 +158,3 @@ object ExternalManager extends Logging {
   }
 
 }
-// scalastyle:on classforname
