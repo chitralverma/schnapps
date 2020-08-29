@@ -24,6 +24,8 @@ import com.github.chitralverma.schnapps.internal.RestService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.jboss.resteasy.spi.HttpRequest;
+import scala.Unit;
+import scala.runtime.AbstractFunction1;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
@@ -37,35 +39,38 @@ import java.util.ArrayList;
 public class JavaJDBCService extends RestService implements CustomSubject {
     @Override
     public Response get(HttpRequest request) {
-        JDBCExternal jdbcLink = (JDBCExternal) ExternalManager.getExternal("mysql_conn").get();
-
-        System.out.println(jdbcLink.hashCode());
+        JDBCExternal jdbcLink = (JDBCExternal) ExternalManager.getExternal("hsqldb_source").get();
 
         ArrayList<String> arr = new ArrayList<>();
-        jdbcLink.executeThis((Connection c) -> {
-            ResultSet queryResult = null;
-            try {
-                queryResult = c.prepareStatement(
-                        "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.SYSTEM_TABLES WHERE TABLE_TYPE='TABLE'"
-                ).executeQuery();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-            while (true) {
-                try {
-                    assert queryResult != null;
-                    if (!queryResult.next()) break;
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-                try {
-                    arr.add(queryResult.getString(1));
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
 
-            return null;
+
+        jdbcLink.executeThis(new AbstractFunction1<Connection, Unit>() {
+            @Override
+            public Unit apply(Connection c) {
+                ResultSet queryResult = null;
+                try {
+                    queryResult = c.prepareStatement(
+                            "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.SYSTEM_TABLES WHERE TABLE_TYPE='TABLE'"
+                    ).executeQuery();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                while (true) {
+                    try {
+                        assert queryResult != null;
+                        if (!queryResult.next()) break;
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    try {
+                        arr.add(queryResult.getString(1));
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+
+                return null;
+            }
         });
 
         return Response.ok().entity(String.join(", ", arr)).build();
