@@ -62,7 +62,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss z</maven.build.timestamp.format>
 
         <java.version>1.8</java.version>
-        <json4s.version>3.2.11</json4s.version>
+        <json4s.version>3.6.7</json4s.version>
         <scalastyle.version>1.0.0</scalastyle.version>
         <scalafmt.version>1.0.3</scalafmt.version>
         <scala.binary.version>2.11</scala.binary.version>
@@ -138,14 +138,14 @@
                 <groupId>org.json4s</groupId>
                 <artifactId>json4s-jackson_${scala.binary.version}</artifactId>
                 <version>${json4s.version}</version>
-                <scope>${provided.scope}</scope>
+                <scope>${compile.scope}</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.json4s</groupId>
                 <artifactId>json4s-ext_${scala.binary.version}</artifactId>
                 <version>${json4s.version}</version>
-                <scope>${provided.scope}</scope>
+                <scope>${compile.scope}</scope>
             </dependency>
 
             <dependency>
