@@ -6,7 +6,7 @@ name: Maven Test
 on:
   push:
     branches:
-      - master
+      - *
   pull_request:
     branches:
       - master
@@ -25,14 +25,14 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Cache Maven packages
+      - name: Check for cached Maven Dependencies
         uses: actions/cache@v2
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build Package
+      - name: Execute Unit Tests
         run: mvn -B clean test --file pom.xml
 
       - name: Upload coverage to Codecov
@@ -40,5 +40,3 @@ jobs:
         with:
           flags: unittests
           fail_ci_if_error: true
-
-      - run: mkdir staging && cp target/*.jar staging
