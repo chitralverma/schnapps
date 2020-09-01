@@ -24,7 +24,7 @@ import org.apache.shiro.subject.Subject
 import org.apache.shiro.SecurityUtils
 import org.jboss.resteasy.spi.HttpRequest
 
-import scala.io.Source
+import scala.io.{BufferedSource, Source}
 import scala.util.{Failure, Success, Try}
 
 trait Service {
@@ -74,26 +74,18 @@ abstract class RestService extends Logging with Service {
 
   def put(request: HttpRequest): Response = DefaultResponse
 
-  def getRequestBody(request: HttpRequest): Option[String] = {
+  def getRequestBody(request: HttpRequest): Try[String] = {
     Try {
-      import scala.io.BufferedSource
       val source: BufferedSource = Source.fromInputStream(request.getInputStream)
       val requestBody: String = source.mkString
       source.close()
 
       requestBody
-    } match {
-      case Success(str) => Option(str)
-      case Failure(ex) =>
-        ex.printStackTrace()
-        None
     }
   }
 
 }
 
 trait CustomSubject {
-
   def getSubject(request: HttpRequest): Subject = SecurityUtils.getSubject
-
 }

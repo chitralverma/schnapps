@@ -50,44 +50,44 @@ abstract class Logging() {
   }
 
   // Log methods that take only a String
-  def logInfo(msg: => String) {
+  def logInfo(msg: String) {
     if (log.isInfoEnabled) log.info(msg)
   }
 
-  def logDebug(msg: => String) {
+  def logDebug(msg: String) {
     if (log.isDebugEnabled) log.debug(msg)
   }
 
-  def logTrace(msg: => String) {
+  def logTrace(msg: String) {
     if (log.isTraceEnabled) log.trace(msg)
   }
 
-  def logWarning(msg: => String) {
+  def logWarning(msg: String) {
     if (log.isWarnEnabled) log.warn(msg)
   }
 
-  def logError(msg: => String) {
+  def logError(msg: String) {
     if (log.isErrorEnabled) log.error(msg)
   }
 
   // Log methods that take Throwables (Exceptions/Errors) too
-  def logInfo(msg: => String, throwable: Throwable) {
+  def logInfo(msg: String, throwable: Throwable) {
     if (log.isInfoEnabled) log.info(msg, throwable)
   }
 
-  def logDebug(msg: => String, throwable: Throwable) {
+  def logDebug(msg: String, throwable: Throwable) {
     if (log.isDebugEnabled) log.debug(msg, throwable)
   }
 
-  def logTrace(msg: => String, throwable: Throwable) {
+  def logTrace(msg: String, throwable: Throwable) {
     if (log.isTraceEnabled) log.trace(msg, throwable)
   }
 
-  def logWarning(msg: => String, throwable: Throwable) {
+  def logWarning(msg: String, throwable: Throwable) {
     if (log.isWarnEnabled) log.warn(msg, throwable)
   }
 
-  def logError(msg: => String, throwable: Throwable) {
+  def logError(msg: String, throwable: Throwable) {
     if (log.isErrorEnabled) log.error(msg, throwable)
   }
 
@@ -189,17 +189,18 @@ private[schnapps] object Logging {
    * logging system to its initial state so that the next class to use logging triggers
    * initialization again.
    */
-  def uninitialize(): Unit = initLock.synchronized {
-    if (isLog4j12) {
-      if (defaultSparkLog4jConfig) {
-        defaultSparkLog4jConfig = false
-        LogManager.resetConfiguration()
-      } else {
-        LogManager.getRootLogger.setLevel(defaultRootLevel)
+  def uninitialize(): Unit =
+    initLock.synchronized {
+      if (isLog4j12) {
+        if (defaultSparkLog4jConfig) {
+          defaultSparkLog4jConfig = false
+          LogManager.resetConfiguration()
+        } else {
+          LogManager.getRootLogger.setLevel(defaultRootLevel)
+        }
       }
+      this.initialized = false
     }
-    this.initialized = false
-  }
 
   private def isLog4j12: Boolean = {
     // This distinguishes the log4j 1.2 binding, currently

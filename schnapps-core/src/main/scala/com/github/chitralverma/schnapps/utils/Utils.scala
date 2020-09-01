@@ -18,6 +18,8 @@ package com.github.chitralverma.schnapps.utils
 
 import java.util.{Locale, Properties}
 
+import javax.ws.rs.core.Response
+
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
@@ -82,4 +84,9 @@ object Utils {
   def getContextOrMainClassLoader: ClassLoader =
     Option(Thread.currentThread().getContextClassLoader).getOrElse(getMainClassLoader)
 
+  def createResponse(status: Response.StatusType, entity: Any): Response =
+    createResponse(status.getStatusCode, entity)
+
+  def createResponse(status: Int, entity: Any): Response =
+    Response.status(status).entity(entity).build
 }
