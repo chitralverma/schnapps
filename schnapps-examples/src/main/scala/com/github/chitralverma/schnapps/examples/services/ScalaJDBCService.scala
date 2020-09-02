@@ -18,9 +18,11 @@ package com.github.chitralverma.schnapps.examples.services
 
 import java.sql.ResultSet
 
+import com.github.chitralverma.schnapps.examples.dto._
 import com.github.chitralverma.schnapps.extras.ExternalManager
 import com.github.chitralverma.schnapps.extras.externals.jdbc.JDBCExternal
 import com.github.chitralverma.schnapps.internal.{CustomSubject, RestService}
+import com.github.chitralverma.schnapps.utils.Utils._
 import javax.ws.rs.Path
 import javax.ws.rs.core.Response
 import org.apache.shiro.authz.annotation.RequiresAuthentication
@@ -28,6 +30,7 @@ import org.apache.shiro.subject.Subject
 import org.jboss.resteasy.spi.HttpRequest
 
 import scala.collection.mutable.ArrayBuffer
+import scala.util._
 
 @Path("/tables")
 @RequiresAuthentication
@@ -51,6 +54,35 @@ class ScalaJDBCService extends RestService with CustomSubject {
     })
 
     Response.ok().entity(arr.mkString(", ")).build()
+  }
+
+  override def post(request: HttpRequest): Response = {
+    val a: Seq[SampleTable] = jdbcLink
+      .readAs[SampleTable]("SELECT * FROM test_tbl")
+      .flatten
+    Response.ok().entity(a.mkString("\n")).build()
+  }
+
+  override def put(request: HttpRequest): Response = {
+    val newRow: SampleTable = SampleTable("abc", 123)
+
+    Try(jdbcLink.insertFrom[SampleTable]("test_tbl", newRow)) match {
+      case Failure(exception) =>
+        logError("Error occurred!", exception)
+        createResponse(400, s"Error occurred! Reason: ${exception.getMessage}")
+      case Success(_) =>
+        createResponse(200, s"Inserted Record '$newRow'!")
+    }
+  }
+
+  override def delete(request: HttpRequest): Response = {
+    Try(jdbcLink.updateFromQuery("truncate table test_tbl")) match {
+      case Failure(exception) =>
+        logError("Error occurred!", exception)
+        createResponse(400, s"Error occurred! Reason: ${exception.getMessage}")
+      case Success(_) =>
+        createResponse(200, s"Truncated Table!")
+    }
   }
 
   override def getSubject(request: HttpRequest): Subject = {

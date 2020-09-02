@@ -60,12 +60,8 @@ object EmbeddedDB extends Logging {
       con = DriverManager.getConnection(jdbcUrl, "SA", "")
       stmt = con.createStatement()
 
-      result = stmt.executeUpdate("""CREATE TABLE IF NOT EXISTS test_tbl (
-          |id INT NOT NULL,
-          |title VARCHAR(50) NOT NULL,
-          |author VARCHAR(20) NOT NULL,
-          |submission_date DATE,
-          |PRIMARY KEY (id))""".stripMargin)
+      result =
+        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS test_tbl(name varchar(10), age int)")
 
     } match {
       case Success(_) => logInfo("Test table created successfully.");

@@ -26,6 +26,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-reflect</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.dubbo</groupId>
             <artifactId>dubbo</artifactId>
         </dependency>
@@ -295,6 +300,10 @@
                         <relocation>
                             <pattern>org.json4s</pattern>
                             <shadedPattern>com.github.chitralverma.org.json4s</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.fasterxml.jackson</pattern>
+                            <shadedPattern>com.github.chitralverma.com.fasterxml</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
