@@ -210,7 +210,6 @@
                     <skipSources>${scalafmt.skip}</skipSources> <!-- (Optional) skip formatting main sources -->
                     <respectVersion>false</respectVersion> <!-- (Optional) fail if no version set in scalafmt.conf -->
                     <validateOnly>false</validateOnly> <!-- check formatting without changing files -->
-                    <onlyChangedFiles>true</onlyChangedFiles>
                 </configuration>
                 <executions>
                     <execution>
