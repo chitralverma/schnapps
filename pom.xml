@@ -148,6 +148,18 @@
             </dependency>
 
             <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-scala_2.11</artifactId>
+                <version>2.11.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.11.1</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.json4s</groupId>
                 <artifactId>json4s-ext_${scala.binary.version}</artifactId>
                 <version>${json4s.version}</version>
@@ -332,28 +344,9 @@
                     <version>4.3.0</version>
                     <executions>
                         <execution>
-                            <id>eclipse-add-source</id>
-                            <goals>
-                                <goal>add-source</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>scala-compile-first</id>
                             <goals>
                                 <goal>compile</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>scala-test-compile-first</id>
-                            <goals>
                                 <goal>testCompile</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>attach-scaladocs</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>doc-jar</goal>
                             </goals>
                         </execution>
                     </executions>

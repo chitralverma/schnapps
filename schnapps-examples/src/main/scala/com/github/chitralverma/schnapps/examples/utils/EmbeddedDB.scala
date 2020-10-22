@@ -28,21 +28,28 @@ object EmbeddedDB extends Logging {
 
   private var _instance: Server = _
 
-  def start(config: Map[String, String]): Unit = {
+  def start(config: Map[String, Any]): Unit = {
     if (_instance == null) {
-      _instance = {
-        val props: HsqlProperties = new HsqlProperties()
-        props.setProperty("server.database.0", config("jdbcUrl"))
+      Try(config("jdbcUrl").toString) match {
+        case Success(jdbcUrl) =>
+          _instance = {
 
-        val sonicServer: Server = new Server()
-        sonicServer.setProperties(props)
+            val props: HsqlProperties = new HsqlProperties()
+            props.setProperty("server.database.0", jdbcUrl)
 
-        sonicServer
+            val hsqldbServer: Server = new Server()
+            hsqldbServer.setProperties(props)
+
+            hsqldbServer
+          }
+
+          logInfo("Starting Embedded DB.")
+          _instance.start()
+          createTestTable(jdbcUrl)
+        case Failure(ex) =>
+          logError("Invalid value found for config 'jdbcUrl'.", ex)
+          throw ex
       }
-
-      logInfo("Starting Embedded DB.")
-      _instance.start()
-      createTestTable(config("jdbcUrl"))
     } else {
       logWarning("Embedded DB already running.")
     }

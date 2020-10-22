@@ -25,10 +25,10 @@ import com.github.chitralverma.schnapps.extras.externals.jdbc.DatabaseUtils._
 import com.github.chitralverma.schnapps.extras.orm.Column
 import com.github.chitralverma.schnapps.internal.Logging
 import com.github.chitralverma.schnapps.utils.Utils._
-import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 import com.zaxxer.hikari.util.PropertyElf
-import org.json4s.{Formats, _}
+import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 import org.json4s.jackson.Serialization
+import org.json4s.{Formats, _}
 
 import scala.annotation.tailrec
 import scala.collection.JavaConverters._
@@ -53,8 +53,12 @@ class JDBCExternal extends Logging with External {
       s"Provided config is empty. Supported properties:\n $supportedProperties")
 
     val properties = new Properties()
-    properties.putAll(ec.configs.asJava)
+    val (stringOnlyConfigs, otherConfigs) = ec.configs.partition(_._2.isInstanceOf[String])
+    logWarning(
+      s"Only String type values supported. " +
+        s"Omitting configs with keys [${otherConfigs.mkString("'", ", ", "'")}].")
 
+    properties.putAll(stringOnlyConfigs.mapValues(_.toString).asJava)
     withTry(
       new HikariConfig(properties),
       s"Illegal Argument: Supported properties:\n $supportedProperties")

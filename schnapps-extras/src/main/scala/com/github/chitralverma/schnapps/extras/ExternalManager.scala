@@ -56,24 +56,21 @@ object ExternalManager extends Logging {
         val externals: Seq[(String, External)] = availExtSeq
           .map(x => (x._1, Utils.classForName(x._2.get)))
           .map(ec =>
-            (ec._1.name, {
+            (Utils.lower(ec._1.name), {
               val external: External = ec._2.newInstance().asInstanceOf[External]
               external.initialise(ec._1)
+              logInfo(
+                s"Configured an external with class name '${ec._2.getCanonicalName}', " +
+                  s"type '${ec._1.tpe}' and given name '${ec._1.name}'")
 
               external
             }))
 
-        availExtSeq.foreach(
-          ec =>
-            logInfo(
-              s"Configured an external with class name '${ec._2.get}', " +
-                s"type '${ec._1.tpe}' and given name '${ec._1.name}'"))
-
         TrieMap.empty[String, External] ++ externals
       }
 
-      logInfo("Externals loaded successfully")
-    } else logWarning("Externals already loaded")
+      logInfo("Externals loaded successfully.")
+    } else logWarning("Externals already loaded.")
 
     _managerInstance
   }

@@ -28,9 +28,9 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class JDBCExternalTestSuite extends TestBase {
 
-  var jDBCExternal: JDBCExternal = _
+  private var jDBCExternal: JDBCExternal = _
 
-  val config: ExternalConfigModel = ExternalConfigModel(
+  private val config: ExternalConfigModel = ExternalConfigModel(
     name = "test_conn",
     `type` = "jdbc",
     configs = Map(
