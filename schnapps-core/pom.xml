@@ -15,10 +15,6 @@
 
     <packaging>jar</packaging>
 
-    <properties>
-        <scalafmt.skip>false</scalafmt.skip>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -70,6 +66,16 @@
         <dependency>
             <groupId>org.json4s</groupId>
             <artifactId>json4s-ext_${scala.binary.version}</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-scala_2.11</artifactId>
         </dependency>
 
         <!-- Test -->
@@ -159,39 +165,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>add-sources</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/main/scala-${scala.binary.version}</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>prepare-test-jar</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.antipathy</groupId>
                 <artifactId>mvn-scalafmt_${scala.binary.version}</artifactId>
                 <configuration>
@@ -200,7 +173,6 @@
                     <skipSources>${scalafmt.skip}</skipSources> <!-- (Optional) skip formatting main sources -->
                     <respectVersion>false</respectVersion> <!-- (Optional) fail if no version set in scalafmt.conf -->
                     <validateOnly>false</validateOnly> <!-- check formatting without changing files -->
-                    <onlyChangedFiles>true</onlyChangedFiles>
                 </configuration>
                 <executions>
                     <execution>

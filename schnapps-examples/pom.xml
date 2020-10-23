@@ -22,6 +22,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.scala-lang.modules</groupId>
+            <artifactId>scala-java8-compat_2.11</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.chitralverma</groupId>
             <artifactId>schnapps-core_${scala.binary.version}</artifactId>
             <version>${project.parent.version}</version>
@@ -43,7 +48,6 @@
 
     <build>
         <sourceDirectory>src/main/scala</sourceDirectory>
-        <testSourceDirectory>src/test/scala</testSourceDirectory>
 
         <plugins>
 
@@ -56,7 +60,6 @@
                     <skipSources>${scalafmt.skip}</skipSources> <!-- (Optional) skip formatting main sources -->
                     <respectVersion>false</respectVersion> <!-- (Optional) fail if no version set in scalafmt.conf -->
                     <validateOnly>false</validateOnly> <!-- check formatting without changing files -->
-                    <onlyChangedFiles>true</onlyChangedFiles>
                 </configuration>
                 <executions>
                     <execution>

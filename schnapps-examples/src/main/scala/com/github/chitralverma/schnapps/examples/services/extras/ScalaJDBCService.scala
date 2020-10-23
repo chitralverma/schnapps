@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.chitralverma.schnapps.examples.services
+package com.github.chitralverma.schnapps.examples.services.extras
 
 import java.sql.ResultSet
 
@@ -32,7 +32,7 @@ import org.jboss.resteasy.spi.HttpRequest
 import scala.collection.mutable.ArrayBuffer
 import scala.util._
 
-@Path("/tables")
+@Path("/jdbc")
 @RequiresAuthentication
 class ScalaJDBCService extends RestService with CustomSubject {
 

@@ -20,29 +20,30 @@ import com.github.chitralverma.schnapps.Server;
 import com.github.chitralverma.schnapps.config.ConfigParser;
 import com.github.chitralverma.schnapps.config.Configuration;
 import com.github.chitralverma.schnapps.config.models.ExternalConfigModel;
-import com.github.chitralverma.schnapps.examples.utils.EmbeddedDB;
+import com.github.chitralverma.schnapps.examples.utils.EmbeddedJDBCServer;
+import com.github.chitralverma.schnapps.examples.utils.EmbeddedRedisServer;
 import com.github.chitralverma.schnapps.extras.ExternalManager;
+import com.github.chitralverma.schnapps.utils.Utils;
 import scala.Option;
-import scala.runtime.AbstractFunction1;
+import scala.collection.Seq;
 
 public class JavaAppServer {
     public static void main(String[] args) {
         Configuration configuration = ConfigParser.parse(args);
+        Seq<ExternalConfigModel> externalConfigs = configuration.externalConfigs();
 
+        Option<ExternalConfigModel> jdbcConfigOpt = Utils.getExternalConfigByName("hsqldb_source", externalConfigs);
+        Option<ExternalConfigModel> redisConfigOpt = Utils.getExternalConfigByName("redis_source", externalConfigs);
 
-        Option<ExternalConfigModel> externalConfigOpt =
-                configuration.externalConfigs().find(
-                        new AbstractFunction1<ExternalConfigModel, Object>() {
-                            @Override
-                            public Boolean apply(ExternalConfigModel ecm) {
-                                return ecm.name().matches("hsqldb_source");
-                            }
-                        });
-
-        if (externalConfigOpt.isDefined()) {
-            EmbeddedDB.start(externalConfigOpt.get().configs());
-            ExternalManager.loadExternals(configuration);
+        if (jdbcConfigOpt.isDefined()) {
+            EmbeddedJDBCServer.start(jdbcConfigOpt.get().configs());
         }
+
+        if (redisConfigOpt.isDefined()) {
+            EmbeddedRedisServer.start();
+        }
+
+        ExternalManager.loadExternals(configuration);
 
         Server.bootUp(configuration);
         Server.await();

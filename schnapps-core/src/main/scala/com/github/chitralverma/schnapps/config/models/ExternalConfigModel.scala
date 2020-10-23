@@ -17,12 +17,29 @@
 package com.github.chitralverma.schnapps.config.models
 
 import com.github.chitralverma.schnapps.utils.Utils
+import org.yaml.snakeyaml.Yaml
 
-// todo check this config again
 case class ExternalConfigModel(
     name: String,
     private val `type`: String,
-    configs: Map[String, String] = Map.empty) {
+    configs: Map[String, Any] = Map.empty) {
+
+  val configAsJsonStr: String = {
+    import com.fasterxml.jackson.databind.ObjectMapper
+    val mapper = new ObjectMapper()
+    mapper.registerModule(com.fasterxml.jackson.module.scala.DefaultScalaModule)
+
+    mapper.writeValueAsString(configs)
+  }
+
+  val configAsYamlStr: String = {
+    import org.codehaus.jackson.map.ObjectMapper
+    val mapper = new ObjectMapper()
+    val jsonNodeTree = mapper.readTree(configAsJsonStr)
+    val v = mapper.convertValue(jsonNodeTree, classOf[java.util.Map[String, Object]])
+
+    new Yaml().dump(v)
+  }
 
   val tpe: String = Utils.lower(`type`)
 }
