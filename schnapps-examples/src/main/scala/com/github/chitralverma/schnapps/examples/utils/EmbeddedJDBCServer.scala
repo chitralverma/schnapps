@@ -24,7 +24,7 @@ import org.hsqldb.server.Server
 
 import scala.util._
 
-object EmbeddedDB extends Logging {
+object EmbeddedJDBCServer extends Logging {
 
   private var _instance: Server = _
 
@@ -43,7 +43,7 @@ object EmbeddedDB extends Logging {
             hsqldbServer
           }
 
-          logInfo("Starting Embedded DB.")
+          logInfo("Starting Embedded JDBC Server.")
           _instance.start()
           createTestTable(jdbcUrl)
         case Failure(ex) =>
@@ -51,7 +51,7 @@ object EmbeddedDB extends Logging {
           throw ex
       }
     } else {
-      logWarning("Embedded DB already running.")
+      logWarning("Embedded JDBC Server already running.")
     }
   }
 
@@ -79,7 +79,7 @@ object EmbeddedDB extends Logging {
 
   def stop(): Unit = {
     if (!_instance.isNotRunning) {
-      logInfo("Stopping Embedded DB.")
+      logInfo("Stopping Embedded JDBC Server.")
       _instance.stop()
     }
   }

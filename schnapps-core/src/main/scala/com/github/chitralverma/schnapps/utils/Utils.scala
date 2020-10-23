@@ -18,6 +18,7 @@ package com.github.chitralverma.schnapps.utils
 
 import java.util.{Locale, Properties}
 
+import com.github.chitralverma.schnapps.config.models.ExternalConfigModel
 import com.github.chitralverma.schnapps.internal.Logging
 import javax.ws.rs.core.Response
 import org.slf4j.Logger
@@ -165,5 +166,11 @@ object Utils extends Logging {
   def getGenericName[T: TypeTag](fullName: Boolean = false): String =
     if (fullName) typeOf[T].typeSymbol.fullName
     else typeOf[T].typeSymbol.name.toString
+
+  def getExternalConfigByName(
+      name: String,
+      externalConfigs: Seq[ExternalConfigModel]): Option[ExternalConfigModel] = {
+    externalConfigs.find(_.name.matches(name))
+  }
 
 }

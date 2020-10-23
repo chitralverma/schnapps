@@ -16,22 +16,25 @@
 
 package com.github.chitralverma.schnapps.examples
 
-import com.github.chitralverma.schnapps.config.{ConfigParser, Configuration}
 import com.github.chitralverma.schnapps.Server
-import com.github.chitralverma.schnapps.examples.utils.EmbeddedDB
+import com.github.chitralverma.schnapps.config.{ConfigParser, Configuration}
+import com.github.chitralverma.schnapps.examples.utils.{EmbeddedJDBCServer, EmbeddedRedisServer}
 import com.github.chitralverma.schnapps.extras.ExternalManager
+import com.github.chitralverma.schnapps.utils.Utils
 
 object ScalaAppServer {
 
   def main(args: Array[String]): Unit = {
     val configuration: Configuration = ConfigParser.parse(args)
+    val externalConfigs = configuration.externalConfigs
 
-    configuration.externalConfigs.find(_.name.matches("hsqldb_source")) match {
-      case Some(ecm) =>
-        EmbeddedDB.start(ecm.configs)
-        ExternalManager.loadExternals(configuration)
-      case None =>
-    }
+    val jdbcConfigOpt = Utils.getExternalConfigByName("hsqldb_source", externalConfigs)
+    val redisConfigOpt = Utils.getExternalConfigByName("redis_source", externalConfigs)
+
+    if (jdbcConfigOpt.isDefined) EmbeddedJDBCServer.start(jdbcConfigOpt.get.configs)
+    if (redisConfigOpt.isDefined) EmbeddedRedisServer.start()
+
+    ExternalManager.loadExternals(configuration)
 
     Server.bootUp(configuration)
     Server.await()

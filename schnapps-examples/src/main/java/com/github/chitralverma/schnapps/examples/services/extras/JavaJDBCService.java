@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.chitralverma.schnapps.examples.services;
+package com.github.chitralverma.schnapps.examples.services.extras;
 
 
 import com.github.chitralverma.schnapps.extras.ExternalManager;
@@ -34,7 +34,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-@Path("tables")
+@Path("jdbc")
 @RequiresAuthentication
 public class JavaJDBCService extends RestService implements CustomSubject {
     @Override
@@ -42,7 +42,6 @@ public class JavaJDBCService extends RestService implements CustomSubject {
         JDBCExternal jdbcLink = (JDBCExternal) ExternalManager.getExternal("hsqldb_source").get();
 
         ArrayList<String> arr = new ArrayList<>();
-
 
         jdbcLink.executeThis(new AbstractFunction1<Connection, Unit>() {
             @Override
