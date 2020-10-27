@@ -17,10 +17,11 @@
 package com.github.chitralverma.schnapps.internal
 
 import com.github.chitralverma.schnapps.config.ConfigParser
-import javax.ws.rs.core.{Context, Response}
-import javax.ws.rs.core.Response.Status
-import javax.ws.rs.ext.{ExceptionMapper => JaxRSExpMapper}
 import javax.ws.rs.NotFoundException
+import javax.ws.rs.core.Response.Status
+import javax.ws.rs.core.{Context, Response}
+import javax.ws.rs.ext.{ExceptionMapper => JaxRSExpMapper}
+import org.apache.shiro.authc.UnknownAccountException
 import org.apache.shiro.authz._
 import org.apache.shiro.session.SessionException
 import org.jboss.resteasy.spi.HttpRequest
@@ -35,6 +36,7 @@ class ExceptionMapper extends Logging with JaxRSExpMapper[Exception] {
   override def toResponse(exception: Exception): Response = {
     import org.apache.shiro.ShiroException
     val status: Status = exception match {
+      case _: UnknownAccountException => Status.UNAUTHORIZED
       case _: HostUnauthorizedException => Status.UNAUTHORIZED
       case _: UnauthorizedException => Status.UNAUTHORIZED
       case _: UnauthenticatedException => Status.UNAUTHORIZED

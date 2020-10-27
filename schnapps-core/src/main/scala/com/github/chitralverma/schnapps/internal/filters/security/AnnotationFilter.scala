@@ -18,14 +18,14 @@ package com.github.chitralverma.schnapps.internal.filters.security
 
 import java.lang.annotation.Annotation
 
-import com.github.chitralverma.schnapps.internal.{CustomSubject, Logging}
 import com.github.chitralverma.schnapps.internal.filters.security.handlers._
+import com.github.chitralverma.schnapps.internal.{CustomSubject, Logging}
 import javax.ws.rs.container._
 import javax.ws.rs.core.Context
+import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authz.annotation._
 import org.apache.shiro.authz.aop._
 import org.apache.shiro.subject.Subject
-import org.apache.shiro.SecurityUtils
 import org.jboss.resteasy.spi.HttpRequest
 
 import scala.util.{Failure, Success, Try}
@@ -81,7 +81,7 @@ class AnnotationFilter(val authzSpecs: Seq[Annotation], resourceInfo: ResourceIn
           exception)
         SecurityUtils.getSubject
       case Failure(_) =>
-        logWarning("Error encountered while building Subject")
+        logWarning("No Security Subject found.")
         SecurityUtils.getSubject
     }
 

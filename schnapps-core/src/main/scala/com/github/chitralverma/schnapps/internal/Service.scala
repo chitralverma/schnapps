@@ -20,8 +20,8 @@ import com.github.chitralverma.schnapps.config.ConfigParser
 import com.github.chitralverma.schnapps.enums.HTTPMethodsEnums
 import javax.ws.rs._
 import javax.ws.rs.core.{Context, Response}
-import org.apache.shiro.subject.Subject
 import org.apache.shiro.SecurityUtils
+import org.apache.shiro.subject.Subject
 import org.jboss.resteasy.spi.HttpRequest
 
 import scala.io.{BufferedSource, Source}

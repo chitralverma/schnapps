@@ -16,13 +16,20 @@
 
 package com.github.chitralverma.schnapps.utils
 
+import java.lang.reflect.InvocationTargetException
+import java.util
 import java.util.{Locale, Properties}
 
 import com.github.chitralverma.schnapps.config.models.ExternalConfigModel
 import com.github.chitralverma.schnapps.internal.Logging
 import javax.ws.rs.core.Response
+import org.apache.shiro.SecurityUtils
+import org.apache.shiro.mgt.DefaultSecurityManager
+import org.apache.shiro.session.Session
+import org.apache.shiro.session.mgt.DefaultSessionManager
 import org.slf4j.Logger
 
+import scala.collection.JavaConverters._
 import scala.io.Source
 import scala.reflect.runtime.universe._
 import scala.util.{Failure, Success, Try}
@@ -171,6 +178,44 @@ object Utils extends Logging {
       name: String,
       externalConfigs: Seq[ExternalConfigModel]): Option[ExternalConfigModel] = {
     externalConfigs.find(_.name.matches(name))
+  }
+
+  @throws(classOf[NoSuchMethodException])
+  @throws(classOf[IllegalAccessException])
+  @throws(classOf[InvocationTargetException])
+  def getActiveSessions: Map[String, Session] = {
+    val securityManager = SecurityUtils.getSecurityManager.asInstanceOf[DefaultSecurityManager]
+
+    val getActiveSessionsMethod =
+      classOf[DefaultSessionManager].getDeclaredMethod("getActiveSessions")
+    getActiveSessionsMethod.setAccessible(true)
+
+    getActiveSessionsMethod
+      .invoke(securityManager.getSessionManager)
+      .asInstanceOf[util.Collection[Session]]
+      .asScala
+      .map(s => s.getId.toString -> s)
+      .toMap
+  }
+
+  def getSessionsByAttribute(attrKey: Object, attrValue: Object): Option[Iterable[Session]] = {
+    Try(getActiveSessions.filter(_._2.getAttribute(attrKey) == attrValue).values).toOption
+  }
+
+  def stopSessions(session: Session, sessions: Session*): Unit = {
+    val securityManager = SecurityUtils.getSecurityManager.asInstanceOf[DefaultSecurityManager]
+
+    val deleteMethod =
+      classOf[DefaultSessionManager].getDeclaredMethod("delete", classOf[Session])
+    deleteMethod.setAccessible(true)
+
+    logInfo(s"Discarding Session with ID '${session.getId}'")
+
+    deleteMethod.invoke(securityManager.getSessionManager, session)
+    sessions.foreach(s => {
+      logInfo(s"Discarding Session with ID '${s.getId}'")
+      deleteMethod.invoke(securityManager.getSessionManager, s)
+    })
   }
 
 }
