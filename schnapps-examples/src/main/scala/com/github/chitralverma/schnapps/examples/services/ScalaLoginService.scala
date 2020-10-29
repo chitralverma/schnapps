@@ -25,7 +25,6 @@ import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.authz.annotation.RequiresGuest
 import org.apache.shiro.subject.Subject
 import org.jboss.resteasy.spi.HttpRequest
-
 @Path("login")
 @RequiresGuest
 class ScalaLoginService extends RestService with CustomSubject {
@@ -43,12 +42,12 @@ class ScalaLoginService extends RestService with CustomSubject {
     val token = new UsernamePasswordToken(username, password)
     val sub: Subject = SecurityUtils.getSubject
     sub.login(token)
-    sub.getSession.setAttribute(UserHeader, username)
 
-    Response.ok.entity(s"Logged in with session ID: ${sub.getSession.getId}").build()
+    val givenUserName = Option(sub.getSession.getAttribute("givenName")).getOrElse("Unknown")
+    Response.ok
+      .entity(s"User '$givenUserName' logged in with session ID: ${sub.getSession.getId}")
+      .build()
   }
-
-  override def post(request: HttpRequest): Response = DefaultResponse
 
   override def getSubject(request: HttpRequest): Subject = {
     val sessionID: String = request.getHttpHeaders.getRequestHeader(SessionIDHeader).get(0)

@@ -28,6 +28,7 @@ import org.apache.shiro.subject.Subject;
 import org.jboss.resteasy.spi.HttpRequest;
 import scala.Option;
 import scala.collection.Iterable;
+import scala.compat.java8.JFunction;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
@@ -50,9 +51,11 @@ public class JavaLoginService extends RestService implements CustomSubject {
         AuthenticationToken token = new UsernamePasswordToken(username, password);
         Subject sub = SecurityUtils.getSubject();
         sub.login(token);
-        sub.getSession().setAttribute(UserHeader, username);
 
-        return Response.ok().entity(String.format("Logged in with session ID: %s",
+        String givenUserName = Option.apply(sub.getSession().getAttribute("givenName"))
+                .getOrElse(JFunction.func(() -> "Unknown"));
+        return Response.ok().entity(String.format("User '%s' logged in with session ID: %s",
+                givenUserName,
                 sub.getSession().getId())).build();
     }
 
